@@ -1,41 +1,46 @@
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, SkipForward } from "lucide-react";
 import { timerAtom } from "@/store/timer";
+import { useTimer } from "@/lib/hooks/useTimer";
 
 export function Controls() {
-  const [timer, setTimer] = useAtom(timerAtom);
+  const [timer] = useAtom(timerAtom);
+  const { startTimer, pauseTimer, resumeTimer, resetTimer, skipToNext } = useTimer();
 
-  // These are placeholder functions for now
-  const handleStart = () => {
-    console.log('Start timer');
-  };
-
-  const handlePause = () => {
-    console.log('Pause timer');
-  };
-
-  const handleReset = () => {
-    console.log('Reset timer');
+  // Start or resume the timer
+  const handleStartOrResume = () => {
+    if (timer.mode === "idle") {
+      startTimer("work");
+    } else {
+      resumeTimer();
+    }
   };
 
   return (
     <div className="flex items-center justify-center space-x-4 mt-6">
       {!timer.isRunning ? (
-        <Button onClick={handleStart} size="lg">
+        <Button onClick={handleStartOrResume} size="lg">
           <Play className="mr-2 h-4 w-4" />
-          Start
+          {timer.mode === "idle" ? "Start" : "Resume"}
         </Button>
       ) : (
-        <Button onClick={handlePause} variant="outline" size="lg">
+        <Button onClick={pauseTimer} variant="outline" size="lg">
           <Pause className="mr-2 h-4 w-4" />
           Pause
         </Button>
       )}
-      <Button onClick={handleReset} variant="ghost" size="lg">
+      <Button onClick={resetTimer} variant="ghost" size="lg">
         <RotateCcw className="mr-2 h-4 w-4" />
         Reset
       </Button>
+      
+      {timer.mode !== "idle" && (
+        <Button onClick={skipToNext} variant="ghost" size="lg">
+          <SkipForward className="mr-2 h-4 w-4" />
+          Skip
+        </Button>
+      )}
     </div>
   );
 }
