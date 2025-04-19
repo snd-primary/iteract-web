@@ -44,13 +44,15 @@ export function Timer() {
 	}, [timer.mode, timer.timeRemaining, formatTime, modeText]);
 
 	return (
-		<div className="flex flex-col items-center justify-center space-y-4">
-			<h2 className="text-2xl font-semibold text-primary">{modeText()}</h2>
-			<div className="text-7xl font-mono font-bold">
+		<div className="w-full h-full grid grid-rows-[50px_80px_1fr] place-items-center text-center  justify-items-center space-y-4">
+			<h2 className="w-full h-full text-2xl font-semibold text-primary mb-0">
+				{modeText()}
+			</h2>
+			<div className="self-center w-full h-full text-7xl font-mono mb-0 font-bold">
 				{timer.mode === "idle" ? "--:--" : formatTime(timer.timeRemaining)}
 			</div>
 			{timer.mode !== "idle" && (
-				<p className="text-sm text-muted-foreground">
+				<p className="w-full h-full text-sm text-muted-foreground">
 					Pomodoro #{timer.completedPomodoros + (timer.mode === "work" ? 1 : 0)}
 				</p>
 			)}

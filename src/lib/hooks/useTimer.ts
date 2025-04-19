@@ -113,7 +113,7 @@ export function useTimer() {
 			setRecords([...records, record]);
 			sessionStartRef.current = null;
 		},
-		[setRecords, ...records, records, timer.completedPomodoros],
+		[setRecords, records, timer.completedPomodoros],
 	);
 
 	// Skip to the next timer phase
