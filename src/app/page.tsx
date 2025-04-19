@@ -1,3 +1,5 @@
+"use client";
+
 import { Container } from "@/components/layout/Container";
 import { 
   Timer, 
@@ -6,8 +8,16 @@ import {
   ThemeToggle 
 } from "@/components/pomodoro";
 import { Settings } from "@/components/pomodoro/Settings";
+import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
+import { usePersistState } from "@/lib/hooks/usePersistState";
 
 export default function Home() {
+  // Initialize app state from localStorage
+  useInitializeApp();
+  
+  // Persist state to localStorage
+  usePersistState();
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
       <ThemeToggle />
