@@ -1,11 +1,11 @@
 import { useAtom } from "jotai";
 import { timerAtom } from "@/store/timer";
-import { settingsAtom } from "@/store/settings";
+// import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
 
 export function Timer() {
 	const [timer] = useAtom(timerAtom);
-	const [settings] = useAtom(settingsAtom);
+	// const [settings] = useAtom(settingsAtom);
 
 	// Format time as MM:SS
 	const formatTime = useCallback((seconds: number): string => {
