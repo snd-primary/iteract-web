@@ -4,4 +4,7 @@ import { atom } from "jotai";
 export type ThemeMode = "light" | "dark";
 
 // Theme atom
+// export const themeAtom = atom<ThemeMode>("light");
+
+// アトムを初期化
 export const themeAtom = atom<ThemeMode>("light");
