@@ -45,14 +45,12 @@ export function Timer() {
 
 	return (
 		<div className="w-full h-full grid grid-rows-[50px_80px_1fr] place-items-center text-center  justify-items-center space-y-4">
-			<h2 className="w-full h-full text-2xl font-semibold text-primary mb-0">
-				{modeText()}
-			</h2>
-			<div className="self-center w-full h-full text-7xl font-mono mb-0 font-bold">
-				{timer.mode === "idle" ? "--:--" : formatTime(timer.timeRemaining)}
+			<h2 className="w-full h-full text-2xl text-primary mb-0">{modeText()}</h2>
+			<div className="self-center w-full h-full text-7xl font-departure mb-0 font-bold">
+				{timer.mode === "idle" ? "––:––" : formatTime(timer.timeRemaining)}
 			</div>
 			{timer.mode !== "idle" && (
-				<p className="w-full h-full text-sm text-muted-foreground">
+				<p className="w-full h-full text-sm text-muted-foreground ">
 					Pomodoro #{timer.completedPomodoros + (timer.mode === "work" ? 1 : 0)}
 				</p>
 			)}
