@@ -5,11 +5,11 @@ export type TimerMode = "work" | "shortBreak" | "longBreak" | "idle";
 
 // Timer state interface
 export interface TimerState {
-	mode: TimerMode;
-	timeRemaining: number; // in seconds
-	isRunning: boolean;
-	completedPomodoros: number;
-	currentCycle: number;
+	mode: TimerMode; //タイマーの状態
+	timeRemaining: number; // タイマーの残時間
+	isRunning: boolean; //タイマーが実行されているかどうか
+	completedPomodoros: number; //そのセッションでタイマーが満了した回数
+	currentCycle: number; //何回目のポモドーロタイマーか
 }
 
 // Initial timer state
