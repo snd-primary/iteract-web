@@ -1,11 +1,11 @@
 import { useAtom } from "jotai";
 import { timerAtom } from "@/store/timer";
-// import { settingsAtom } from "@/store/settings";
+import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
 
 export function Timer() {
 	const [timer] = useAtom(timerAtom);
-	// const [settings] = useAtom(settingsAtom);
+	const [settings] = useAtom(settingsAtom);
 
 	// Format time as MM:SS
 	const formatTime = useCallback((seconds: number): string => {
@@ -49,7 +49,9 @@ export function Timer() {
 		<div className="w-full h-full grid grid-rows-[50px_80px_1fr] place-items-center text-center  justify-items-center space-y-4">
 			<h2 className="w-full h-full text-2xl text-primary mb-0">{modeText()}</h2>
 			<div className="self-center w-full h-full text-7xl font-departure mb-0 font-bold">
-				{timer.mode === "idle" ? "––:––" : formatTime(timer.timeRemaining)}
+				{timer.mode === "idle"
+					? formatTime(settings.workTime * 60)
+					: formatTime(timer.timeRemaining)}
 			</div>
 			{timer.mode !== "idle" && (
 				<p className="w-full h-full text-sm text-muted-foreground ">

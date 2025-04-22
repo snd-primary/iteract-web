@@ -25,29 +25,42 @@ export function Controls() {
 	};
 
 	return (
-		<div className="flex items-center justify-center space-x-4 mt-6">
+		<div className="grid grid-cols-3 gap-4 w-full h-auto">
 			{!timer.isRunning ? (
-				<Button onClick={handleStartOrResume} size="lg">
-					<Play className="mr-2 h-4 w-4" />
+				<Button onClick={handleStartOrResume} size="lg" className="rounded-sm">
+					<Play className=" h-4 w-4" />
 					{timer.mode === "idle" ? "Start" : "Resume"}
 				</Button>
 			) : (
-				<Button onClick={pauseTimer} variant="outline" size="lg">
-					<Pause className="mr-2 h-4 w-4" />
+				<Button
+					onClick={pauseTimer}
+					variant="outline"
+					size="lg"
+					className="rounded-sm"
+				>
+					<Pause className="h-4 w-4" />
 					Pause
 				</Button>
 			)}
-			<Button onClick={resetTimer} variant="ghost" size="lg">
-				<RotateCcw className="mr-2 h-4 w-4" />
+			<Button
+				onClick={resetTimer}
+				variant="ghost"
+				size="lg"
+				className="roundes-sm"
+			>
+				<RotateCcw className="h-4 w-4" />
 				Reset
 			</Button>
 
-			{timer.mode !== "idle" && (
-				<Button onClick={skipToNext} variant="ghost" size="lg">
-					<SkipForward className="mr-2 h-4 w-4" />
-					Skip
-				</Button>
-			)}
+			<Button
+				onClick={skipToNext}
+				variant="ghost"
+				size="lg"
+				disabled={timer.mode === "idle"}
+			>
+				<SkipForward className="h-4 w-4" />
+				Skip
+			</Button>
 		</div>
 	);
 }

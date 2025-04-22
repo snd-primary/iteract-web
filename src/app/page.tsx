@@ -26,7 +26,7 @@ export default function Home() {
 			<Container>
 				<h1 className="text-3xl font-bold mb-8">Pomodoro Timer</h1>
 
-				<div className="w-full grid grid-rows-[150px_1fr] bg-card rounded-xl shadow-sm border border-border p-8">
+				<div className="w-full grid grid-rows-[150px_1fr] gap-8 bg-card rounded-sm  shadow-sm border border-border p-8">
 					<Timer />
 					<Controls />
 				</div>
