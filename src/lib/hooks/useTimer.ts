@@ -1,9 +1,33 @@
+// src/lib/hooks/useTimer.ts
+
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
-import { timerAtom, type TimerMode, type TimerState } from "@/store/timer";
+import { timerAtom, type TimerMode } from "@/store/timer";
 import { settingsAtom } from "@/store/settings";
 import { recordsAtom, type PomodoroRecord } from "@/store/records";
 import { useNotificationSound } from "./useNotificationSound";
+
+type TickPayload = {
+	timeRemaining: number;
+};
+
+type ErrorPayload = {
+	message: string;
+	code?: number;
+};
+
+// Workerからメインスレッドへのメッセージ型定義
+type WorkerToMainMessage =
+	| { type: "TICK"; payload: TickPayload }
+	| { type: "COMPLETE"; payload?: undefined }
+	| { type: "ERROR"; payload: ErrorPayload };
+
+// メインスレッドからWorkerへのメッセージ型定義
+type MainToWorkerMessage =
+	| { type: "START"; payload: { duration: number } }
+	| { type: "PAUSE"; payload?: undefined }
+	| { type: "RESUME"; payload?: undefined }
+	| { type: "RESET"; payload?: undefined };
 
 export function useTimer() {
 	const [timer, setTimer] = useAtom(timerAtom);
@@ -13,8 +37,72 @@ export function useTimer() {
 
 	// 現在のタイマーセッションの開始時刻を追跡するための参照
 	const sessionStartRef = useRef<Date | null>(null);
-	// インターバル（setInterval）を追跡するための参照
-	const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+	// Web Workerの参照
+	const workerRef = useRef<Worker | null>(null);
+
+	// Web Workerの初期化
+	useEffect(() => {
+		// クライアントサイドでのみWeb Workerを作成
+		if (typeof window === "undefined") return;
+
+		// Workerが存在しない場合のみ作成
+		if (!workerRef.current) {
+			try {
+				workerRef.current = new Worker(
+					new URL("@/workers/timerWorker.ts", import.meta.url),
+				);
+
+				// Workerからのメッセージハンドラを設定
+				workerRef.current.onmessage = (
+					event: MessageEvent<WorkerToMainMessage>,
+				) => {
+					const { type, payload } = event.data;
+
+					switch (type) {
+						case "TICK":
+							// 残り時間の更新
+							if (payload && typeof payload.timeRemaining === "number") {
+								setTimer((prev) => ({
+									...prev,
+									timeRemaining: payload.timeRemaining,
+								}));
+							}
+							break;
+
+						case "COMPLETE":
+							// タイマー完了時の処理
+							playSound();
+
+							// 作業セッションが完了した場合は記録
+							if (timer.mode === "work" && sessionStartRef.current) {
+								recordSession(true);
+							}
+
+							// 次のタイマーフェーズに移行
+							skipToNext();
+							break;
+
+						case "ERROR":
+							console.error("Timer worker error:", payload);
+							break;
+					}
+				};
+			} catch (error) {
+				console.error("Failed to initialize Web Worker:", error);
+				// Workerの初期化に失敗した場合はフォールバックロジックを使用
+			}
+		}
+
+		// コンポーネントのアンマウント時にWorkerをクリーンアップ
+		return () => {
+			if (workerRef.current) {
+				workerRef.current.terminate();
+				workerRef.current = null;
+			}
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [playSound, setTimer, timer.mode]);
 
 	// タイマーを開始する
 	const startTimer = (mode: TimerMode = "work") => {
@@ -42,13 +130,22 @@ export function useTimer() {
 			sessionStartRef.current = new Date();
 		}
 
-		// タイマーの状態を更新する
+		// タイマー状態を更新
 		setTimer({
 			...timer,
 			mode,
 			timeRemaining: duration,
 			isRunning: true,
 		});
+
+		// Web Workerでタイマーを開始
+		if (workerRef.current) {
+			const message: MainToWorkerMessage = {
+				type: "START",
+				payload: { duration },
+			};
+			workerRef.current.postMessage(message);
+		}
 	};
 
 	// タイマーを一時停止する
@@ -56,10 +153,19 @@ export function useTimer() {
 		// 実行中でなければ何もしない
 		if (!timer.isRunning) return;
 
+		// タイマー状態を更新
 		setTimer({
 			...timer,
 			isRunning: false,
 		});
+
+		// Web Workerのタイマーを一時停止
+		if (workerRef.current) {
+			const message: MainToWorkerMessage = {
+				type: "PAUSE",
+			};
+			workerRef.current.postMessage(message);
+		}
 	};
 
 	// タイマーを再開する
@@ -67,23 +173,34 @@ export function useTimer() {
 		// すでに実行中の場合は何もしない
 		if (timer.isRunning) return;
 
+		// タイマー状態を更新
 		setTimer({
 			...timer,
 			isRunning: true,
 		});
+
+		// Web Workerのタイマーを再開
+		if (workerRef.current) {
+			const message: MainToWorkerMessage = {
+				type: "RESUME",
+			};
+			workerRef.current.postMessage(message);
+		}
 	};
 
 	// タイマーをリセットする
 	const resetTimer = () => {
-		// インターバルをクリア（停止）する
-		if (intervalRef.current) {
-			clearInterval(intervalRef.current);
-			intervalRef.current = null;
-		}
-
 		// 作業セッションをリセットする場合は、未完了として記録する
 		if (timer.mode === "work" && sessionStartRef.current) {
 			recordSession(false);
+		}
+
+		// Web Workerのタイマーをリセット
+		if (workerRef.current) {
+			const message: MainToWorkerMessage = {
+				type: "RESET",
+			};
+			workerRef.current.postMessage(message);
 		}
 
 		// タイマーの状態をリセットする
@@ -119,14 +236,8 @@ export function useTimer() {
 
 	// 次のタイマーフェーズにスキップする
 	const skipToNext = useCallback(() => {
-		console.log("asdfasfasdfasdf");
 		// 作業セッション中の場合は、それを完了させる
 		if (timer.mode === "work") {
-			/* (セッション開始時刻があれば、完了として記録する - このロジックはrecordSessionに集約されているか、useEffect内で処理される) */
-			/* if (sessionStartRef.current) {
-				recordSession(true);
-			} */
-
 			// 完了したポモドーロ数をインクリメント（増加）する
 			const completedPomodoros = timer.completedPomodoros + 1;
 			const currentCycle = timer.currentCycle + 1;
@@ -140,104 +251,63 @@ export function useTimer() {
 			// 次の休憩タイプを設定する
 			const nextMode = shouldTakeLongBreak ? "longBreak" : "shortBreak";
 
+			// 次のタイマーの時間を計算
+			const nextDuration = shouldTakeLongBreak
+				? settings.longBreakTime * 60
+				: settings.shortBreakTime * 60;
+
 			// タイマーの状態を更新する
 			setTimer({
 				...timer,
 				mode: nextMode,
 				completedPomodoros,
 				currentCycle: nextCycle,
-				isRunning: settings.autoStartBreak, // 休憩を自動開始するかどうか
-				timeRemaining: shouldTakeLongBreak
-					? settings.longBreakTime * 60
-					: settings.shortBreakTime * 60,
+				isRunning: settings.autoStartBreak,
+				timeRemaining: nextDuration,
 			});
 
-			// 通知音を再生する (タイマーが0になった時にも呼ばれるため、二重再生に注意が必要かも)
-			// playSound(); // useEffect内のタイマー完了時に再生するため、ここでは不要かもしれない
+			// Web Workerで新しいタイマーを開始（自動開始が有効な場合）
+			if (settings.autoStartBreak && workerRef.current) {
+				const message: MainToWorkerMessage = {
+					type: "START",
+					payload: { duration: nextDuration },
+				};
+				workerRef.current.postMessage(message);
+			}
 		}
 		// 休憩中の場合は、作業に戻る
 		else if (timer.mode === "shortBreak" || timer.mode === "longBreak") {
 			sessionStartRef.current = new Date(); // 新しい作業セッションの開始時刻を記録
 
+			// 次の作業時間を計算
+			const nextDuration = settings.workTime * 60;
+
 			setTimer({
 				...timer,
 				mode: "work",
-				timeRemaining: settings.workTime * 60,
-				isRunning: settings.autoStartWork, // 作業を自動開始するかどうか
+				timeRemaining: nextDuration,
+				isRunning: settings.autoStartWork,
 			});
 
-			// 通知音を再生する (同上)
-			// playSound(); // useEffect内のタイマー完了時に再生するため、ここでは不要かもしれない
+			// Web Workerで新しいタイマーを開始（自動開始が有効な場合）
+			if (settings.autoStartWork && workerRef.current) {
+				const message: MainToWorkerMessage = {
+					type: "START",
+					payload: { duration: nextDuration },
+				};
+				workerRef.current.postMessage(message);
+			}
 		}
 	}, [
 		setTimer,
-		// playSound, // skipToNext自体が音を鳴らすのではなく、状態遷移の結果として音が鳴るべき
 		settings.autoStartBreak,
 		settings.workTime,
 		settings.autoStartWork,
 		settings.longBreakInterval,
 		settings.longBreakTime,
 		settings.shortBreakTime,
-		timer, // timerオブジェクト全体に依存しているため、変更があると再生成される
+		timer,
 	]);
-
-	// タイマーのティック（刻み）効果 - 実行中に毎秒タイマーを更新する
-	useEffect(() => {
-		// タイマーが実行中でなければ、インターバルをクリアして終了
-		if (!timer.isRunning) {
-			if (intervalRef.current) {
-				clearInterval(intervalRef.current);
-				intervalRef.current = null;
-			}
-			return;
-		}
-
-		// タイマー実行中なら、1秒ごとにインターバル処理を開始
-		intervalRef.current = setInterval(() => {
-			setTimer((prev: TimerState) => {
-				// 通常のティック - まだ残り時間がある場合（2秒以上）
-				if (prev.timeRemaining > 1) {
-					return {
-						...prev,
-						timeRemaining: prev.timeRemaining - 1,
-					};
-				}
-
-				// タイマーがゼロになった場合（残り時間が1秒以下）
-				// インターバルをクリア（停止）する
-				if (intervalRef.current) {
-					clearInterval(intervalRef.current);
-					intervalRef.current = null;
-				}
-
-				// 通知音を再生する
-				playSound();
-
-				// 必要であれば、完了した作業セッションを記録する
-				// (skipToNextより前に記録する必要がある場合)
-				if (prev.mode === "work" && sessionStartRef.current) {
-					recordSession(true); // ここで記録するか、skipToNextに任せるか要検討
-				}
-
-				// 作業と休憩の両方について、次のフェーズを処理する
-				skipToNext(); // skipToNextが状態を更新する
-
-				// このインターバルコールバックとしては、残り時間を0にして返す
-				// skipToNextによる状態更新が非同期の場合、一瞬0が表示される
-				return {
-					...prev,
-				};
-			});
-		}, 1000);
-
-		// アンマウント時や依存配列の変更時にインターバルをクリーンアップ（クリア）する
-		return () => {
-			if (intervalRef.current) {
-				clearInterval(intervalRef.current);
-			}
-		};
-		// 依存配列: isRunningが変わるたび、または関連関数が再生成されるたびに副作用を再実行
-	}, [timer.isRunning, setTimer, playSound, recordSession, skipToNext]);
 
 	// カスタムフックが提供する関数群
 	return {

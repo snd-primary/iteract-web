@@ -10,7 +10,7 @@ export function useNotificationSound() {
 		if (!audioRef.current) {
 			audioRef.current = new Audio();
 			// Simple bell sound (base64 encoded short audio)
-			audioRef.current.src = "/emergency-siren-alert.mp3";
+			audioRef.current.src = "/sound/emergency-siren-alert.mp3";
 			audioRef.current.load();
 		}
 
