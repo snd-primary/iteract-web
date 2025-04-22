@@ -1,4 +1,4 @@
-// src/lib/hooks/useTimer.ts
+"use client";
 
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
@@ -41,68 +41,34 @@ export function useTimer() {
 	// Web Workerの参照
 	const workerRef = useRef<Worker | null>(null);
 
-	// Web Workerの初期化
+	// Web Workerからのメッセージを処理する最新の関数（ハンドラ）への参照を保持するref
+	const handleMessageRef = useRef<
+		((event: MessageEvent<WorkerToMainMessage>) => void) | null
+	>(null);
+
+	// Workerの生成・破棄用Effect
 	useEffect(() => {
-		// クライアントサイドでのみWeb Workerを作成
 		if (typeof window === "undefined") return;
+		try {
+			const workerUrl = new URL(
+				"../../workers/timerWorker.ts",
+				import.meta.url,
+			);
+			workerRef.current = new Worker(workerUrl);
+			// onmessageには常にRefの最新関数を呼ぶラッパーを設定
+			workerRef.current.onmessage = (event) =>
+				handleMessageRef.current?.(event);
 
-		// Workerが存在しない場合のみ作成
-		if (!workerRef.current) {
-			try {
-				workerRef.current = new Worker(
-					new URL("@/workers/timerWorker.ts", import.meta.url),
-				);
-
-				// Workerからのメッセージハンドラを設定
-				workerRef.current.onmessage = (
-					event: MessageEvent<WorkerToMainMessage>,
-				) => {
-					const { type, payload } = event.data;
-
-					switch (type) {
-						case "TICK":
-							// 残り時間の更新
-							if (payload && typeof payload.timeRemaining === "number") {
-								setTimer((prev) => ({
-									...prev,
-									timeRemaining: payload.timeRemaining,
-								}));
-							}
-							break;
-
-						case "COMPLETE":
-							// タイマー完了時の処理
-							playSound();
-
-							// 作業セッションが完了した場合は記録
-							if (timer.mode === "work" && sessionStartRef.current) {
-								recordSession(true);
-							}
-
-							// 次のタイマーフェーズに移行
-							skipToNext();
-							break;
-
-						case "ERROR":
-							console.error("Timer worker error:", payload);
-							break;
-					}
-				};
-			} catch (error) {
-				console.error("Failed to initialize Web Worker:", error);
-				// Workerの初期化に失敗した場合はフォールバックロジックを使用
-			}
-		}
-
-		// コンポーネントのアンマウント時にWorkerをクリーンアップ
-		return () => {
-			if (workerRef.current) {
-				workerRef.current.terminate();
+			return () => {
+				if (workerRef.current) {
+					workerRef.current.terminate();
+				}
 				workerRef.current = null;
-			}
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [playSound, setTimer, timer.mode]);
+			};
+		} catch (error) {
+			console.error("Failed initialize Web Worker:", error);
+		}
+	}, []); // マウント・アンマウント時のみ
 
 	// タイマーを開始する
 	const startTimer = (mode: TimerMode = "work") => {
@@ -236,6 +202,19 @@ export function useTimer() {
 
 	// 次のタイマーフェーズにスキップする
 	const skipToNext = useCallback(() => {
+		//タイマーが実行中の場合、Workerにリセットメッセージを送る
+		if (timer.isRunning && workerRef.current) {
+			const message: MainToWorkerMessage = {
+				type: "RESET",
+			};
+			workerRef.current.postMessage(message);
+		}
+
+		if (timer.mode === "work" && sessionStartRef.current) {
+			recordSession(false);
+			sessionStartRef.current = null;
+		}
+
 		// 作業セッション中の場合は、それを完了させる
 		if (timer.mode === "work") {
 			// 完了したポモドーロ数をインクリメント（増加）する
@@ -307,7 +286,44 @@ export function useTimer() {
 		settings.longBreakTime,
 		settings.shortBreakTime,
 		timer,
+		recordSession,
 	]);
+
+	//Web Workerからカウント処理の結果を受取り、タイマーに適用する
+	useEffect(() => {
+		handleMessageRef.current = (event: MessageEvent<WorkerToMainMessage>) => {
+			const { type, payload } = event.data;
+
+			switch (type) {
+				case "TICK":
+					// 残り時間の更新
+					if (payload && typeof payload.timeRemaining === "number") {
+						setTimer((prev) => ({
+							...prev,
+							timeRemaining: payload.timeRemaining,
+						}));
+					}
+					break;
+
+				case "COMPLETE":
+					// タイマー完了時の処理
+					playSound();
+
+					// 作業セッションが完了した場合は記録
+					if (timer.mode === "work" && sessionStartRef.current) {
+						recordSession(true);
+					}
+
+					// 次のタイマーフェーズに移行
+					skipToNext();
+					break;
+
+				case "ERROR":
+					console.error("Timer worker error:", payload);
+					break;
+			}
+		};
+	}, [timer, playSound, setTimer, recordSession, skipToNext]);
 
 	// カスタムフックが提供する関数群
 	return {
