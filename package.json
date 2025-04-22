@@ -10,7 +10,11 @@
 		"lint:fix": "biome check --apply .",
 		"format": "biome format .",
 		"format:fix": "biome format --write .",
-		"prepare": "husky"
+		"prepare": "husky",
+		"test": "vitest run",
+		"test:browser": "vitest run --browser",
+		"test:watch": "vitest --browser",
+		"test:coverage": "vitest run --coverage --browser"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,ts,tsx}": [
@@ -33,14 +37,21 @@
 		"@biomejs/biome": "1.9.4",
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/react": "^16.3.0",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"@vitejs/plugin-react": "^4.4.1",
+		"@vitest/browser": "^3.1.2",
+		"chromedriver": "^135.0.2",
 		"eslint": "^9",
 		"eslint-config-next": "15.3.1",
 		"husky": "^9.1.7",
+		"jsdom": "^26.1.0",
 		"lint-staged": "^15.5.1",
 		"tailwindcss": "^4",
-		"typescript": "^5"
+		"typescript": "^5",
+		"vitest": "^3.1.2"
 	}
 }
