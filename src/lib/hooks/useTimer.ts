@@ -203,49 +203,35 @@ export function useTimer() {
 	// 次のタイマーフェーズにスキップする
 	const skipToNext = useCallback(() => {
 		//タイマーが実行中の場合、Workerにリセットメッセージを送る
-		if (timer.isRunning && workerRef.current) {
-			const message: MainToWorkerMessage = {
+		if (workerRef.current) {
+			const resetMessage: MainToWorkerMessage = {
 				type: "RESET",
 			};
-			workerRef.current.postMessage(message);
+			workerRef.current.postMessage(resetMessage);
 		}
 
-		if (timer.mode === "work" && sessionStartRef.current) {
-			recordSession(false);
-			sessionStartRef.current = null;
-		}
+		// 2. 次のモード・時間を計算（元のコードを維持）
+		let nextMode: TimerMode;
+		let nextDuration: number;
+		let newCompletedPomodoros = timer.completedPomodoros;
+		let newCurrentCycle = timer.currentCycle;
 
 		// 作業セッション中の場合は、それを完了させる
 		if (timer.mode === "work") {
-			// 完了したポモドーロ数をインクリメント（増加）する
-			const completedPomodoros = timer.completedPomodoros + 1;
-			const currentCycle = timer.currentCycle + 1;
+			// 既存の処理（ポモドーロのカウントなど）
+			newCompletedPomodoros = timer.completedPomodoros + 1;
+			newCurrentCycle = timer.currentCycle + 1;
 
-			// 長い休憩を取るべきかどうかを判断する
-			const shouldTakeLongBreak = currentCycle >= settings.longBreakInterval;
+			const shouldTakeLongBreak = newCurrentCycle >= settings.longBreakInterval;
+			newCurrentCycle = shouldTakeLongBreak ? 0 : newCurrentCycle;
 
-			// 長い休憩の間隔に達したら、サイクルカウンターをリセットする
-			const nextCycle = shouldTakeLongBreak ? 0 : currentCycle;
-
-			// 次の休憩タイプを設定する
-			const nextMode = shouldTakeLongBreak ? "longBreak" : "shortBreak";
-
-			// 次のタイマーの時間を計算
-			const nextDuration = shouldTakeLongBreak
+			nextMode = shouldTakeLongBreak ? "longBreak" : "shortBreak";
+			nextDuration = shouldTakeLongBreak
 				? settings.longBreakTime * 60
 				: settings.shortBreakTime * 60;
 
-			// タイマーの状態を更新する
-			setTimer({
-				...timer,
-				mode: nextMode,
-				completedPomodoros,
-				currentCycle: nextCycle,
-				isRunning: settings.autoStartBreak,
-				timeRemaining: nextDuration,
-			});
-
 			// Web Workerで新しいタイマーを開始（自動開始が有効な場合）
+
 			if (settings.autoStartBreak && workerRef.current) {
 				const message: MainToWorkerMessage = {
 					type: "START",
@@ -255,38 +241,54 @@ export function useTimer() {
 			}
 		}
 		// 休憩中の場合は、作業に戻る
-		else if (timer.mode === "shortBreak" || timer.mode === "longBreak") {
-			sessionStartRef.current = new Date(); // 新しい作業セッションの開始時刻を記録
+		else {
+			// 休憩中の場合
+			nextMode = "work";
+			nextDuration = settings.workTime * 60;
+			sessionStartRef.current = new Date();
+		}
 
-			// 次の作業時間を計算
-			const nextDuration = settings.workTime * 60;
+		// 3. タイマーの状態を更新（ここが重要）
+		setTimer({
+			...timer,
+			mode: nextMode,
+			timeRemaining: nextDuration,
+			isRunning: false, // 常にfalseにする
+			completedPomodoros: newCompletedPomodoros,
+			currentCycle: newCurrentCycle,
+		});
 
-			setTimer({
-				...timer,
-				mode: "work",
-				timeRemaining: nextDuration,
-				isRunning: settings.autoStartWork,
-			});
+		const shouldAutoStart =
+			(nextMode === "work" && settings.autoStartBreak) ||
+			(["shortBreak", "longBreak"].includes(nextMode) &&
+				settings.autoStartBreak);
 
-			// Web Workerで新しいタイマーを開始（自動開始が有効な場合）
-			if (settings.autoStartWork && workerRef.current) {
-				const message: MainToWorkerMessage = {
-					type: "START",
-					payload: { duration: nextDuration },
-				};
-				workerRef.current.postMessage(message);
-			}
+		if (shouldAutoStart) {
+			// 状態更新が確実に完了してから実行するため、少し遅延させる
+			setTimeout(() => {
+				if (workerRef.current) {
+					const startMessage: MainToWorkerMessage = {
+						type: "START",
+						payload: { duration: nextDuration },
+					};
+					workerRef.current.postMessage(startMessage);
+
+					// タイマーの実行状態を更新
+					setTimer((prev) => ({
+						...prev,
+						isRunning: true,
+					}));
+				}
+			}, 50);
 		}
 	}, [
 		setTimer,
 		settings.autoStartBreak,
-		settings.workTime,
-		settings.autoStartWork,
 		settings.longBreakInterval,
 		settings.longBreakTime,
 		settings.shortBreakTime,
+		settings.workTime,
 		timer,
-		recordSession,
 	]);
 
 	//Web Workerからカウント処理の結果を受取り、タイマーに適用する
