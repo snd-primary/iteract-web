@@ -147,6 +147,7 @@ export function useTimer() {
 
 		// Web Workerのタイマーを再開
 		if (workerRef.current) {
+			console.log("Workerにタイアー再開指示を送信");
 			const message: MainToWorkerMessage = {
 				type: "RESUME",
 			};

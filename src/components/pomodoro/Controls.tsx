@@ -10,17 +10,16 @@ export function Controls() {
 		useTimer();
 
 	// Start or resume the timer
-	// Start or resume the timer
 	const handleStartOrResume = () => {
 		if (timer.mode === "idle") {
 			// タイマーがまだ始まっていない場合は新規開始
 			startTimer("work");
-		} else if (!timer.isRunning) {
+			return;
+		}
+		if (!timer.isRunning) {
 			// タイマーはセットされているが実行中でない場合は新規開始
-			startTimer(timer.mode);
-		} else {
-			// 実行中の場合は再開
 			resumeTimer();
+			return;
 		}
 	};
 

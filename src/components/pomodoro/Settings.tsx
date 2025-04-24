@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "../ui/input";
 import { Settings as SettingsIcon, X } from "lucide-react";
 import { settingsAtom, type PomodoroSettings } from "@/store/settings";
 
@@ -66,22 +67,21 @@ export function Settings() {
 										<label htmlFor="workTime" className="text-sm">
 											Work
 										</label>
-										<input
-											type="number"
+										<Input
 											id="workTime"
 											name="workTime"
+											type="number"
 											min="1"
 											max="60"
 											value={tempSettings.workTime}
 											onChange={handleChange}
-											className="w-full border border-input rounded-md px-3 py-2 text-sm"
 										/>
 									</div>
 									<div className="space-y-2">
 										<label htmlFor="shortBreakTime" className="text-sm">
 											Short Break
 										</label>
-										<input
+										<Input
 											type="number"
 											id="shortBreakTime"
 											name="shortBreakTime"
@@ -96,7 +96,7 @@ export function Settings() {
 										<label htmlFor="longBreakTime" className="text-sm">
 											Long Break
 										</label>
-										<input
+										<Input
 											type="number"
 											id="longBreakTime"
 											name="longBreakTime"
@@ -114,7 +114,7 @@ export function Settings() {
 								<label htmlFor="longBreakInterval" className="text-sm">
 									Long Break Interval
 								</label>
-								<input
+								<Input
 									type="number"
 									id="longBreakInterval"
 									name="longBreakInterval"

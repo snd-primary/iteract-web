@@ -57,7 +57,9 @@ self.onmessage = (event: MessageEvent<MainToWorkerMessage>) => {
 			break;
 		case "RESUME":
 			// isRunningでなく、interval === null で判定する方が確実な場合もある
+			console.log("タイマーの残時間:", timeRemainingOnPause);
 			if (!isRunning && targetEndTime > 0 && timeRemainingOnPause > 0) {
+				console.log("タイマー再開:", timeRemainingOnPause);
 				// 停止していた時間分、終了目標時刻を未来にずらすのではなく、
 				// 残り時間を使って新しい終了目標時刻を計算する
 				targetEndTime = Date.now() + timeRemainingOnPause;
