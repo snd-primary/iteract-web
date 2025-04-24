@@ -1,5 +1,5 @@
 // Export all pomodoro components
-export { Timer } from "./Timer";
-export { Controls } from "./Controls";
-export { CompletedCounter } from "./CompletedCounter";
-export { ThemeToggle } from "./ThemeToggle";
+export { Timer } from "./timer";
+export { Controls } from "./controls";
+export { CompletedCounter } from "./completed-counter";
+export { ThemeToggle } from "./theme-toggle";

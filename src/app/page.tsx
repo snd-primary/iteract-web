@@ -1,13 +1,13 @@
 "use client";
 
-import { Container } from "@/components/layout/Container";
+import { Container } from "@/components/layout/container";
 import {
 	Timer,
 	Controls,
 	CompletedCounter,
 	ThemeToggle,
 } from "@/components/pomodoro";
-import { Settings } from "@/components/pomodoro/Settings";
+import { Settings } from "@/components/pomodoro/setting";
 import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
 import { usePersistState } from "@/lib/hooks/usePersistState";
 
