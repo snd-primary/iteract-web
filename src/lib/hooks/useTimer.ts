@@ -316,11 +316,7 @@ export function useTimer() {
 						recordSession(true);
 					}
 
-					// 次のタイマーフェーズに移行
-
-					setTimeout(() => {
-						skipToNext();
-					}, 5000);
+					skipToNext();
 
 					break;
 
