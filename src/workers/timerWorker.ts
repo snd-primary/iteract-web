@@ -32,17 +32,18 @@ let initialDuration = 0; // リセット用に初期時間を保持
 // --- メインスレッドからのメッセージハンドラ ---
 self.onmessage = (event: MessageEvent<MainToWorkerMessage>) => {
 	const { type, payload } = event.data;
-	console.log("Worker Received:", type, payload); // デバッグ用ログ
 
 	switch (type) {
 		case "START": {
-			console.log("CASE:START TargetEndTime: ", targetEndTime);
 			const { duration } = payload;
 			cleanupTimer(); // 既存のタイマーがあればクリア
 			initialDuration = duration;
-			const now = Date.now();
+
+			//タイマーが終了するべき正確な時刻を、ミリ秒単位のタイムスタンプとして設定する
+			const now = Date.now(); //現在時刻から指定されたミリ秒後の時点を計算
 			targetEndTime = now + duration * 1000;
 			lastReportedTime = duration; // 初期値をセット
+
 			postMessage({
 				type: "TICK",
 				payload: { timeRemaining: duration },
@@ -50,6 +51,7 @@ self.onmessage = (event: MessageEvent<MainToWorkerMessage>) => {
 			startTimer();
 			break;
 		}
+
 		case "PAUSE":
 			pauseTimer();
 			break;

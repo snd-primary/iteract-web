@@ -8,6 +8,7 @@ export const getInitialTheme = (() => {
 			? "dark"
 			: "light";
 	} catch (error) {
+		console.error("Failed initilize color theme:", error);
 		return "light";
 	}
 })();

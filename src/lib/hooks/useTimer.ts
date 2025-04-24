@@ -291,7 +291,7 @@ export function useTimer() {
 		timer,
 	]);
 
-	//Web Workerからカウント処理の結果を受取り、タイマーに適用する
+	//Web Workerから現在のカウント処理の結果を受取り、タイマーに適用する
 	useEffect(() => {
 		handleMessageRef.current = (event: MessageEvent<WorkerToMainMessage>) => {
 			const { type, payload } = event.data;
@@ -317,7 +317,11 @@ export function useTimer() {
 					}
 
 					// 次のタイマーフェーズに移行
-					skipToNext();
+
+					setTimeout(() => {
+						skipToNext();
+					}, 5000);
+
 					break;
 
 				case "ERROR":
