@@ -25,10 +25,14 @@ export function Timer() {
 				return "Short Break";
 			case "longBreak":
 				return "Long Break";
+			case "waiting":
+				return timer.nextMode === "work"
+					? "Get Ready to Focus..."
+					: "Break Coming Up...";
 			default:
 				return "Ready";
 		}
-	}, [timer.mode]);
+	}, [timer.mode, timer.nextMode]);
 
 	// Set page title with current timer state
 	useEffect(() => {

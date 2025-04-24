@@ -211,7 +211,7 @@ export function useTimer() {
 		}
 
 		// 2. 次のモード・時間を計算（元のコードを維持）
-		let nextMode: TimerMode;
+		// let nextMode: TimerMode;
 		let nextDuration: number;
 		let newCompletedPomodoros = timer.completedPomodoros;
 		let newCurrentCycle = timer.currentCycle;
@@ -222,68 +222,75 @@ export function useTimer() {
 			newCompletedPomodoros = timer.completedPomodoros + 1;
 			newCurrentCycle = timer.currentCycle + 1;
 
+			//超休憩を取るかどうかのロジック。
 			const shouldTakeLongBreak = newCurrentCycle >= settings.longBreakInterval;
+
+			// 長い休憩を取るべき時（shouldTakeLongBreakがtrue）なら、サイクルカウンターを0にリセット
 			newCurrentCycle = shouldTakeLongBreak ? 0 : newCurrentCycle;
 
-			nextMode = shouldTakeLongBreak ? "longBreak" : "shortBreak";
+			timer.nextMode = shouldTakeLongBreak ? "longBreak" : "shortBreak";
+
 			nextDuration = shouldTakeLongBreak
 				? settings.longBreakTime * 60
 				: settings.shortBreakTime * 60;
-
-			// Web Workerで新しいタイマーを開始（自動開始が有効な場合）
-
-			if (settings.autoStartBreak && workerRef.current) {
-				const message: MainToWorkerMessage = {
-					type: "START",
-					payload: { duration: nextDuration },
-				};
-				workerRef.current.postMessage(message);
-			}
 		}
 		// 休憩中の場合は、作業に戻る
 		else {
 			// 休憩中の場合
-			nextMode = "work";
+			timer.nextMode = "work";
 			nextDuration = settings.workTime * 60;
 			sessionStartRef.current = new Date();
 		}
 
-		// 3. タイマーの状態を更新（ここが重要）
+		//次のモードに移行する前に数秒のブランク'waiting'状態を取る
 		setTimer({
 			...timer,
-			mode: nextMode,
+			mode: "waiting",
 			timeRemaining: nextDuration,
 			isRunning: false, // 常にfalseにする
 			completedPomodoros: newCompletedPomodoros,
 			currentCycle: newCurrentCycle,
 		});
 
-		const shouldAutoStart =
-			(nextMode === "work" && settings.autoStartBreak) ||
-			(["shortBreak", "longBreak"].includes(nextMode) &&
-				settings.autoStartBreak);
+		setTimeout(() => {
+			setTimer((prev) => ({
+				...prev,
+				mode: prev.nextMode || "idle",
+				nextMode: null,
+				timeRemaining: nextDuration,
+				isRunning: false,
+			}));
 
-		if (shouldAutoStart) {
-			// 状態更新が確実に完了してから実行するため、少し遅延させる
-			setTimeout(() => {
-				if (workerRef.current) {
-					const startMessage: MainToWorkerMessage = {
-						type: "START",
-						payload: { duration: nextDuration },
-					};
-					workerRef.current.postMessage(startMessage);
+			// 自動開始設定が有効なら、タイマーを開始
+			const shouldAutoStart =
+				(timer.nextMode === "work" && settings.autoStartWork) ||
+				(timer.nextMode &&
+					["shortBreak", "longBreak"].includes(timer.nextMode) &&
+					settings.autoStartBreak);
 
-					// タイマーの実行状態を更新
-					setTimer((prev) => ({
-						...prev,
-						isRunning: true,
-					}));
-				}
-			}, 50);
-		}
+			if (shouldAutoStart) {
+				// 状態更新が確実に完了してから実行するため、少し遅延させる
+				setTimeout(() => {
+					if (workerRef.current) {
+						const startMessage: MainToWorkerMessage = {
+							type: "START",
+							payload: { duration: nextDuration },
+						};
+						workerRef.current.postMessage(startMessage);
+
+						// タイマーの実行状態を更新
+						setTimer((prev) => ({
+							...prev,
+							isRunning: true,
+						}));
+					}
+				}, 50);
+			}
+		}, 3000);
 	}, [
 		setTimer,
 		settings.autoStartBreak,
+		settings.autoStartWork,
 		settings.longBreakInterval,
 		settings.longBreakTime,
 		settings.shortBreakTime,
@@ -317,7 +324,6 @@ export function useTimer() {
 					}
 
 					skipToNext();
-
 					break;
 
 				case "ERROR":
