@@ -96,7 +96,7 @@ export function Settings() {
 						{/* セッティング項目 */}
 						<div className="grid grid-cols-1 gap-4">
 							<SettingBlock title="Timer (minutes)">
-								<div className="grid grid-cols-[repeat(3,1fr)] gap-4 gap-x-6">
+								<div className="grid grid-cols-1 gap-6">
 									<InputTime
 										label="Work"
 										id="workTime"
@@ -134,7 +134,6 @@ export function Settings() {
 										onChange={handleChange}
 										annotation="Number of work sessions before a long break"
 										isMinutes={false}
-										className="row-start-2 row-end-2 col-start-1 col-end-4"
 									/>
 								</div>
 							</SettingBlock>

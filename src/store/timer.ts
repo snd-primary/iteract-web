@@ -14,7 +14,7 @@ export interface TimerState {
 	timeRemaining: number; // タイマーの残時間
 	isRunning: boolean; //タイマーが実行されているかどうか
 	completedPomodoros: number; //そのセッションでタイマーが満了した回数
-	currentCycle: number; //何回目のポモドーロタイマーか
+	currentSession: number; //何回目のポモドーロタイマーか
 	nextMode: TimerMode | null;
 }
 
@@ -24,7 +24,7 @@ export const initialTimerState: TimerState = {
 	timeRemaining: 0,
 	isRunning: false,
 	completedPomodoros: 0,
-	currentCycle: 0,
+	currentSession: 0,
 	nextMode: null,
 };
 

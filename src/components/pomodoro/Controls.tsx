@@ -11,7 +11,7 @@ export function Controls() {
 
 	// Start or resume the timer
 	const handleStartOrResume = () => {
-		if (timer.mode === "idle") {
+		if (timer.mode === "idle" || timer.mode === "waiting") {
 			// タイマーがまだ始まっていない場合は新規開始
 			startTimer("work");
 			return;

@@ -21,7 +21,7 @@ export const InputTime: React.FC<Props> = ({ isMinutes = true, ...props }) => {
 			<label htmlFor={props.name} className="text-sm pl-1">
 				{props.label}
 			</label>
-			<div className="flex items-center gap-1 mt-0.5">
+			<div className="flex items-center gap-2 mt-0.5">
 				<Input
 					type="number"
 					id={props.id}
@@ -30,7 +30,7 @@ export const InputTime: React.FC<Props> = ({ isMinutes = true, ...props }) => {
 					max={props.max}
 					value={props.value}
 					onChange={props.onChange}
-					className="w-full border border-input rounded-sm outline py-2 text-sm"
+					className="max-w-16 border border-input rounded-sm outline py-2 text-sm"
 				/>
 				{isMinutes && <span>min</span>}
 			</div>

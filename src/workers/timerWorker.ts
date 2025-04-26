@@ -1,25 +1,7 @@
-// メッセージ型に対応したペイロード型の定義
-type TickPayload = {
-	timeRemaining: number;
-};
-
-type ErrorPayload = {
-	message: string;
-	code?: number;
-};
-
-// Workerからメインスレッドへのメッセージ型定義
-type WorkerToMainMessage =
-	| { type: "TICK"; payload: TickPayload }
-	| { type: "COMPLETE"; payload?: undefined }
-	| { type: "ERROR"; payload: ErrorPayload };
-
-// メインスレッドからWorkerへのメッセージ型定義
-type MainToWorkerMessage =
-	| { type: "START"; payload: { duration: number } }
-	| { type: "PAUSE"; payload?: undefined }
-	| { type: "RESUME"; payload?: undefined }
-	| { type: "RESET"; payload?: undefined };
+import type {
+	MainToWorkerMessage,
+	WorkerToMainMessage,
+} from "@/types/workerMessages";
 
 // --- Worker内部の状態 ---
 let interval: number | null = null;
@@ -153,6 +135,3 @@ function cleanupTimer() {
 	isRunning = false;
 	console.log("CleanupTimer: isRunning set to false."); // ★ログ追加
 }
-
-// TypeScriptのisolatedModulesエラー対策 (必要に応じて)
-export {};

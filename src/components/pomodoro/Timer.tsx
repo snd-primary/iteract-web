@@ -16,7 +16,6 @@ export function Timer() {
 			.padStart(2, "0")}`;
 	}, []);
 
-	// Display appropriate mode text
 	const modeText = useCallback(() => {
 		switch (timer.mode) {
 			case "work":
