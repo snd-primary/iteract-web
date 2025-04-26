@@ -74,7 +74,6 @@ function startTimer() {
 		// 残り時間（秒）が変わった場合のみTICKメッセージを送信
 		if (remainingSeconds !== lastReportedTime) {
 			lastReportedTime = remainingSeconds;
-			console.log("TICK:", remainingSeconds); // デバッグ用ログ
 			postMessage({
 				type: "TICK",
 				payload: { timeRemaining: remainingSeconds },
