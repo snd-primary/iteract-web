@@ -210,7 +210,7 @@ export function useTimer() {
 						payload: { duration: nextDuration },
 					};
 					postMessage(startMessage);
-				}, 100);
+				}, 1000);
 			}
 		} else {
 			// ★ 自動実行しない場合: idle 状態にし、次のモードを pending に

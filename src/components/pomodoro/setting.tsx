@@ -1,7 +1,9 @@
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Settings as SettingsIcon, Volume2, X } from "lucide-react";
+// import { Settings as SettingsIcon, Volume2, X } from "lucide-react";
+import { GearIcon, SpeakerLoudIcon, Cross1Icon } from "@radix-ui/react-icons";
+
 import {
 	settingsAtom,
 	type SoundType,
@@ -78,7 +80,7 @@ export function Settings() {
 				onClick={openSettings}
 				className="absolute top-4 left-4 rounded-full"
 			>
-				<SettingsIcon className="h-5 w-5" />
+				<GearIcon className="h-5 w-5" />
 				<span className="sr-only">Settings</span>
 			</Button>
 
@@ -89,14 +91,14 @@ export function Settings() {
 						<div className="flex justify-between items-center ">
 							<h2 className="text-xl font-semibold">Settings</h2>
 							<Button variant="ghost" size="icon" onClick={closeSettings}>
-								<X className="h-5 w-5" />
+								<Cross1Icon className="h-5 w-5" />
 								<span className="sr-only">Close</span>
 							</Button>
 						</div>
 						{/* セッティング項目 */}
 						<div className="grid grid-cols-1 gap-4">
 							<SettingBlock title="Timer (minutes)">
-								<div className="grid grid-cols-1 gap-6">
+								<div className="grid grid-cols-4 gap-6">
 									<InputTime
 										label="Work"
 										id="workTime"
@@ -210,12 +212,12 @@ export function Settings() {
 												);
 										}}
 									>
-										<Volume2 size={16} />
+										<SpeakerLoudIcon width={16} />
 										test
 									</Button>
 								</div>
 								<div className="flex items-center gap-2 pl-2">
-									<Volume2 size={16} />
+									<SpeakerLoudIcon width={16} />
 									<Slider
 										id="soundVolume"
 										defaultValue={[tempSettings.soundVolume]}

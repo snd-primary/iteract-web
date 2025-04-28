@@ -1,7 +1,7 @@
 "use client";
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon } from "lucide-react";
+import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
 import { themeAtom, type ThemeMode } from "@/store/theme";
 import { useEffect, useState } from "react";
 
@@ -92,9 +92,9 @@ export function ThemeToggle() {
 			className="rounded-full absolute top-4 right-4"
 		>
 			{theme === "light" ? (
-				<Sun className="h-5 w-5" />
+				<SunIcon className="h-5 w-5" />
 			) : (
-				<Moon className="h-5 w-5" />
+				<MoonIcon className="h-5 w-5" />
 			)}
 			<span className="sr-only">
 				{theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
