@@ -8,7 +8,7 @@ import {
 	ThemeToggle,
 } from "@/components/pomodoro";
 import { Settings } from "@/components/pomodoro/setting";
-import { ProgressCircle } from "@/components/ui/progress-circle";
+import { ProgressCircle } from "@/components/ui/progress-circle/progress-circle";
 import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
 import { usePersistState } from "@/lib/hooks/usePersistState";
 import { settingsAtom } from "@/store/settings";

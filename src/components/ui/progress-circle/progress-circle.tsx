@@ -1,4 +1,5 @@
 "use client";
+import styles from "./progress-circle.module.css";
 import { timerAtom } from "@/store/timer";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
@@ -50,21 +51,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 			animationRef.current.pause();
 		}
 	}, [timer.isRunning, timer.mode]);
-	return (
-		<div
-			ref={divRef}
-			style={{
-				width: "100px",
-				height: "100px",
-				borderRadius: "50%",
-				backgroundImage: `conic-gradient(
-            #003681 0.1%,
-            #003681 var(--angle, 100%),
-            #d9d9d9 var(--angle, 100%) 100%
-          )`,
-			}}
-		/>
-	);
+	return <div ref={divRef} className={styles.progressCircle} />;
 };
 
 // React DevTools での表示名を指定（デバッグに役立つ）
