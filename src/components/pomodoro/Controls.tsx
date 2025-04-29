@@ -10,7 +10,6 @@ import {
 
 import { timerAtom } from "@/store/timer";
 import { useTimer } from "@/lib/hooks/useTimer";
-
 export function Controls() {
 	const [timer] = useAtom(timerAtom);
 	const { startTimer, pauseTimer, resumeTimer, resetTimer, skipToNext } =
@@ -23,7 +22,6 @@ export function Controls() {
 			startTimer("work");
 			return;
 		}
-		console.log("control.tsx", timer.isRunning);
 		if (!timer.isRunning) {
 			// タイマーはセットされているが実行中でない場合は新規開始
 			resumeTimer();

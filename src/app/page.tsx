@@ -8,8 +8,11 @@ import {
 	ThemeToggle,
 } from "@/components/pomodoro";
 import { Settings } from "@/components/pomodoro/setting";
+import { ProgressCircle } from "@/components/ui/progress-circle";
 import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
 import { usePersistState } from "@/lib/hooks/usePersistState";
+import { settingsAtom } from "@/store/settings";
+import { useAtom } from "jotai";
 
 export default function Home() {
 	// Initialize app state from localStorage
@@ -17,6 +20,8 @@ export default function Home() {
 
 	// Persist state to localStorage
 	usePersistState();
+
+	const [settings] = useAtom(settingsAtom);
 
 	return (
 		<main className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
@@ -28,9 +33,9 @@ export default function Home() {
 
 				<div className="w-full grid grid-rows-[1fr_min-content] gap-8 bg-card  border-2 px-6 py-8 relative">
 					<Timer />
+					<ProgressCircle duration={settings.workTime} />
 					<Controls />
 				</div>
-
 				<CompletedCounter />
 			</Container>
 		</main>
