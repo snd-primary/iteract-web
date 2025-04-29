@@ -23,6 +23,7 @@ export function Controls() {
 			startTimer("work");
 			return;
 		}
+		console.log("control.tsx", timer.isRunning);
 		if (!timer.isRunning) {
 			// タイマーはセットされているが実行中でない場合は新規開始
 			resumeTimer();

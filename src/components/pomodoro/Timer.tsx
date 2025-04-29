@@ -2,6 +2,7 @@ import { useAtom } from "jotai";
 import { timerAtom } from "@/store/timer";
 import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
+// import { ProgressCircle } from "../ui/progress-circle";
 
 export function Timer() {
 	const [timer] = useAtom(timerAtom);
@@ -44,10 +45,6 @@ export function Timer() {
 		};
 	}, [timer.mode, timer.timeRemaining, formatTime, modeText]);
 
-	useEffect(() => {
-		console.log(timer.mode);
-	}, [timer.mode]);
-
 	return (
 		<div className="grid grid-cols-1 gap-6 items-start place-items-center w-full h-full">
 			<div className="w-full h-min grid grid-rows-[30px_1fr]  gap-6 text-center justify-items-center items-start">
@@ -69,39 +66,12 @@ export function Timer() {
 							: "|"}
 					</p>
 				</div>
-			</div>
+				<div>
+					<span>css progress ui</span>
 
-			{/* <div className="w-22 h-22 rounded-full border border-amber-300" /> */}
-			<svg
-				width={100}
-				height={100}
-				viewBox="0 0 100 100"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<title>remaining indicator circle</title>
-				<circle
-					fill="currentColor"
-					cx="50"
-					cy="50"
-					r="50"
-					/* 					strokeDasharray={1}
-					strokeDashoffset={0}
-					strokeWidth={20}
-					stroke="red" */
-				/>
-				<defs>
-					<clipPath id="progress-clip">
-						<path d="M50,50 L50,0 A50,50 0 0,1 85.36,14.64 Z" />
-					</clipPath>
-				</defs>
-				<circle
-					cx="50"
-					cy="50"
-					r="50"
-					fill="#4CAF50"
-					clip-path="url(#progress-clip)"
-				/>
-			</svg>
+					{/* <ProgressCircle /> */}
+				</div>
+			</div>
 		</div>
 	);
 }
