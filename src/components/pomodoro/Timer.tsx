@@ -50,7 +50,7 @@ export function Timer() {
 				{modeText()}
 			</span>
 
-			<div className="CUSTOM_TIME_BORDER p-2 w-full   grid gap-2 grid-rows-[1fr_20px] text-foreground/90">
+			<div className="CUSTOM_TIME_BORDER p-2 w-full grid gap-2 grid-rows-[1fr_20px] text-foreground/90">
 				<div className="self-center w-full h-full text-7xl font-departure mb-0 font-bold ">
 					{timer.mode === "idle"
 						? formatTime(settings.workTime * 60)

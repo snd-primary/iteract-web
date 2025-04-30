@@ -1,4 +1,5 @@
 "use client";
+
 import styles from "./progress-circle.module.css";
 import { timerAtom } from "@/store/timer";
 import { useAtom } from "jotai";
@@ -23,7 +24,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 		if (!element) return;
 
 		const animation = element.animate(
-			[{ "--angle": "100%" }, { "--angle": "0%" }],
+			[{ "--angle": "360deg" }, { "--angle": "0deg" }],
 			{
 				duration: Number(duration * 60 * 1000),
 				easing: "linear",
@@ -51,8 +52,12 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 			animationRef.current.pause();
 		}
 	}, [timer.isRunning, timer.mode]);
-	return <div ref={divRef} className={styles.progressCircle} />;
+	return (
+		<div className="w-full h-full flex justify-center items-center relative">
+			<div ref={divRef} className={styles.progressCircle}>
+				<div className={styles.triangleUp} />
+				<div className={styles.triangleDown} />
+			</div>
+		</div>
+	);
 };
-
-// React DevTools での表示名を指定（デバッグに役立つ）
-ProgressCircle.displayName = "ProgressCircle";
