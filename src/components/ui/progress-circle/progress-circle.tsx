@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import styles from "./progress-circle.module.css";
@@ -15,20 +16,21 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 
 	const [timer] = useAtom(timerAtom);
 
-	//Animationの初期化 マウント時に1度実行される
+	// Animationの初期化 マウント時に1度実行される
 	useEffect(() => {
 		if (animationRef.current) {
-			animationRef.current.cancel();
+			// 既存のアニメーションをクリア
+			resetWithEasing();
 		}
+
 		const element = divRef.current;
 		if (!element) return;
 
 		const animation = element.animate(
-			[{ "--angle": "360deg" }, { "--angle": "0deg" }],
+			[{ "--angle": "0deg" }, { "--angle": "360deg" }],
 			{
 				duration: Number(duration * 60 * 1000),
 				easing: "linear",
-				fill: "forwards",
 			},
 		);
 		animation.pause();
@@ -37,18 +39,61 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 
 		return () => {
 			if (animationRef.current) {
-				animationRef.current.cancel();
+				resetWithEasing();
 			}
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [duration]);
 
+	// リセット時にイージングを付与する関数
+	const resetWithEasing = () => {
+		const element = divRef.current;
+		if (!element || !animationRef.current) return;
+
+		// 現在のアニメーションを一時停止
+		animationRef.current.pause();
+
+		// 現在の角度を取得
+		const computedStyle = getComputedStyle(element);
+		const currentAngle = computedStyle.getPropertyValue("--angle") || "0deg";
+
+		// 現在の角度から360degに戻るアニメーションを作成
+		const resetAnimation = element.animate(
+			[{ "--angle": currentAngle }, { "--angle": "0deg" }],
+			{
+				duration: 220,
+				easing: "ease-in-out",
+			},
+		);
+
+		// リセットアニメーション完了後に元のアニメーションをキャンセル
+		resetAnimation.onfinish = () => {
+			if (animationRef.current) {
+				animationRef.current.cancel();
+
+				// 新しいアニメーションを作成
+				const newAnimation = element.animate(
+					[{ "--angle": "0deg" }, { "--angle": "360deg" }],
+					{
+						duration: Number(duration * 60 * 1000),
+						easing: "linear",
+					},
+				);
+				newAnimation.pause();
+				animationRef.current = newAnimation;
+			}
+		};
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (!animationRef.current) return;
 
 		if (timer.isRunning) {
 			animationRef.current.play();
 		} else if (timer.mode === "idle") {
-			animationRef.current.cancel();
+			// cancel()の代わりにイージング付きのリセットを呼び出す
+			resetWithEasing();
 		} else {
 			animationRef.current.pause();
 		}

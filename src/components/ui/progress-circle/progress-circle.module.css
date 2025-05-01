@@ -1,7 +1,7 @@
 @property --angle {
 	syntax: "<angle>";
 	inherits: false;
-	initial-value: 360deg;
+	initial-value: 0deg;
 }
 
 .progressCircle {
@@ -14,7 +14,7 @@
 	background-image: conic-gradient(
 		var(--color-foreground) 0%,
 		var(--color-foreground) var(--angle),
-		var(--color-background) calc(var(--angle) + 1deg)
+		var(--color-background) calc(var(--angle))
 	);
 	position: relative;
 }
