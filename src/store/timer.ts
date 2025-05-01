@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 
 // Timer modes
-export type TimerMode = "work" | "shortBreak" | "longBreak" | "idle";
+export type TimerMode = "focus" | "shortBreak" | "longBreak" | "idle";
 
 // Timer state interface
 export interface TimerState {

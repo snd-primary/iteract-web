@@ -61,7 +61,7 @@ export function useTimer() {
 					break;
 				case "COMPLETE":
 					// 作業セッションが完了した場合は記録
-					if (timer.mode === "work" && sessionStartRef.current) {
+					if (timer.mode === "focus" && sessionStartRef.current) {
 						recordSession(true);
 					}
 
@@ -89,7 +89,7 @@ export function useTimer() {
 	// モードに基づいて時間を設定する
 	const calculateDuration = (mode: TimerMode, settings: PomodoroSettings) => {
 		switch (mode) {
-			case "work":
+			case "focus":
 				return settings.workTime * 60;
 			case "shortBreak":
 				return settings.shortBreakTime * 60;
@@ -132,7 +132,7 @@ export function useTimer() {
 			let newCompletedPomodoros = completedPomodoros;
 			let newCurrentSession = currentSession;
 
-			if (currentMode === "work") {
+			if (currentMode === "focus") {
 				newCompletedPomodoros += 1;
 				newCurrentSession += 1;
 
@@ -146,7 +146,7 @@ export function useTimer() {
 					: settings.shortBreakTime * 60;
 			} else {
 				// 'shortBreak' または 'longBreak' から 'work' へ
-				nextMode = "work";
+				nextMode = "focus";
 				nextDuration = settings.workTime * 60;
 				// sessionStartRef.current の更新は副作用なので、ここでは扱わない
 			}
@@ -164,7 +164,6 @@ export function useTimer() {
 	// 次のタイマーフェーズにスキップする
 	const skipToNext = useCallback((): void => {
 		//タイマーが実行中の場合、Workerにリセットメッセージを送る
-		//
 		if (timer.isRunning) {
 			const resetMessage: MainToWorkerMessage = {
 				type: "RESET",
@@ -181,12 +180,12 @@ export function useTimer() {
 			);
 
 		// --- 副作用: sessionStartRef の更新 (work 以外から work に移る場合) ---
-		if (timer.mode !== "work") {
+		if (timer.mode !== "focus") {
 			sessionStartRef.current = new Date();
 		}
 		// 自動開始設定が有効なら、タイマーを開始
 		const shouldAutoStart =
-			(nextMode === "work" && settings.autoStartWork) ||
+			(nextMode === "focus" && settings.autoStartWork) ||
 			(["shortBreak", "longBreak"].includes(nextMode) &&
 				settings.autoStartBreak);
 
@@ -242,7 +241,7 @@ export function useTimer() {
 	}, [skipToNext]); // skipToNextが再生成されたらrefを更新
 
 	// タイマーを開始する
-	const startTimer = (mode: TimerMode = "work"): void => {
+	const startTimer = (mode: TimerMode = "focus"): void => {
 		// すでに実行中の場合は何もしない
 		if (workerStatus !== "ready" || timer.isRunning) return;
 
@@ -254,7 +253,7 @@ export function useTimer() {
 		}
 
 		// --- 副作用の実行 ---
-		if (mode === "work") {
+		if (mode === "focus") {
 			sessionStartRef.current = new Date();
 		}
 
@@ -306,7 +305,7 @@ export function useTimer() {
 	// タイマーをリセットする
 	const resetTimer = (): void => {
 		// 作業セッションをリセットする場合は、未完了として記録する
-		if (timer.mode === "work" && sessionStartRef.current) {
+		if (timer.mode === "focus" && sessionStartRef.current) {
 			recordSession(false);
 		}
 

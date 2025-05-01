@@ -11,7 +11,7 @@ export const SVGProgressCircle: React.FC<Props> = ({ timer, settings }) => {
 	// 現在のタイマーの最大時間を取得
 	const maxTime = useMemo(() => {
 		switch (timer.mode) {
-			case "work":
+			case "focus":
 				return settings.workTime * 60;
 			case "shortBreak":
 				return settings.shortBreakTime * 60;

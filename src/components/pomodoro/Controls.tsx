@@ -18,8 +18,9 @@ export function Controls() {
 	// Start or resume the timer
 	const handleStartOrResume = () => {
 		if (timer.mode === "idle") {
-			// タイマーがまだ始まっていない場合は新規開始
-			startTimer("work");
+			//  pendingNextMode があればそれを、なければ 'work' を開始
+			const modeToStart = timer.pendingNextMode ?? "focus";
+			startTimer(modeToStart);
 			return;
 		}
 		if (!timer.isRunning) {

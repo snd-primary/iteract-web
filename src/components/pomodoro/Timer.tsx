@@ -1,7 +1,10 @@
+"use client";
+
 import { useAtom } from "jotai";
 import { timerAtom } from "@/store/timer";
 import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
 export function Timer() {
 	const [timer] = useAtom(timerAtom);
@@ -18,7 +21,7 @@ export function Timer() {
 
 	const modeText = useCallback(() => {
 		switch (timer.mode) {
-			case "work":
+			case "focus":
 				return "FOCUS";
 			case "shortBreak":
 				return "SHORT BREAK";
@@ -28,6 +31,19 @@ export function Timer() {
 				return "READY";
 		}
 	}, [timer.mode]);
+
+	const modeIdleTimer = useCallback(() => {
+		switch (timer.pendingNextMode) {
+			case "focus":
+				return settings.workTime * 60;
+			case "shortBreak":
+				return settings.shortBreakTime * 60;
+			case "longBreak":
+				return settings.longBreakTime * 60;
+			default:
+				return settings.workTime * 60;
+		}
+	}, [settings, timer.pendingNextMode]);
 
 	// Set page title with current timer state
 	useEffect(() => {
@@ -45,23 +61,44 @@ export function Timer() {
 	}, [timer.mode, timer.timeRemaining, formatTime, modeText]);
 
 	return (
-		<div className="w-full h-min grid grid-rows-[30px_1fr]  gap-6 text-center justify-items-center items-start">
-			<span className="tracking-[8px] leading-5 text-sm pl-2.5 border-double border-3 border-foreground/80 text-foreground/80 w-fit relative ">
+		<div className="w-full h-min grid grid-rows-[30px_25px_1fr]  gap-6 text-center justify-items-center items-start">
+			<motion.span
+				className="tracking-[8px] leading-5 text-sm pl-2.5 border-double border-3 border-foreground/80 text-foreground/80 w-fit relative"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				transition={{ duration: 0.5 }}
+				key={timer.mode}
+			>
 				{modeText()}
-			</span>
+			</motion.span>
+			<div>
+				<AnimatePresence>
+					{timer.pendingNextMode && timer.mode === "idle" && (
+						<motion.span
+							className="text-sm text-foreground/80"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 0.5 }}
+							key={timer.pendingNextMode}
+						>
+							NEXT MODE &gt;&gt; {timer.pendingNextMode}
+						</motion.span>
+					)}
+				</AnimatePresence>
+			</div>
 
 			<div className="CUSTOM_TIME_BORDER p-2 w-full grid gap-2 grid-rows-[1fr_20px] text-foreground/90">
 				<div className="self-center w-full h-full text-7xl font-departure mb-0 font-bold ">
 					{timer.mode === "idle"
-						? formatTime(settings.workTime * 60)
+						? formatTime(modeIdleTimer())
 						: formatTime(timer.timeRemaining)}
 				</div>
 				<p className="mx-auto w-50 h-full text-sm text-muted-foreground ">
-					{timer.mode !== "idle"
-						? `Pomodoro #${
-								timer.completedPomodoros + (timer.mode === "work" ? 1 : 0)
-							}`
-						: "|"}
+					{`Pomodoro #${
+						timer.completedPomodoros + (timer.mode === "focus" ? 1 : 0)
+					}`}
 				</p>
 			</div>
 		</div>
