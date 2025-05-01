@@ -44,6 +44,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 
 	useEffect(() => {
 		if (!animationRef.current) return;
+
 		if (timer.isRunning) {
 			animationRef.current.play();
 		} else if (timer.mode === "idle") {
@@ -52,6 +53,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 			animationRef.current.pause();
 		}
 	}, [timer.isRunning, timer.mode]);
+
 	return (
 		<div className="w-full h-full flex justify-center items-center relative">
 			<div ref={divRef} className={styles.progressCircle}>
