@@ -22,7 +22,6 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 			// 既存のアニメーションをクリア
 			resetWithEasing();
 		}
-		console.log("デュレーションの値", duration);
 
 		const element = divRef.current;
 		if (!element) return;
@@ -30,7 +29,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 		const animation = element.animate(
 			[{ "--angle": "0deg" }, { "--angle": "360deg" }],
 			{
-				duration: Number(duration * 60 * 1000),
+				duration: Number(duration * 1000),
 				easing: "linear",
 			},
 		);
@@ -75,7 +74,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 				const newAnimation = element.animate(
 					[{ "--angle": "0deg" }, { "--angle": "360deg" }],
 					{
-						duration: Number(duration * 60 * 1000),
+						duration: Number(duration * 1000),
 						easing: "linear",
 					},
 				);

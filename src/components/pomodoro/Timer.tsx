@@ -5,6 +5,7 @@ import { timerAtom } from "@/store/timer";
 import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { ProgressCircle } from "../ui/progress-circle/progress-circle";
 
 export function Timer() {
 	const [timer] = useAtom(timerAtom);
@@ -41,7 +42,7 @@ export function Timer() {
 			case "longBreak":
 				return settings.longBreakTime * 60;
 			default:
-				return settings.workTime * 60;
+				return 0;
 		}
 	}, [settings, timer.pendingNextMode]);
 
@@ -101,6 +102,7 @@ export function Timer() {
 					}`}
 				</p>
 			</div>
+			<ProgressCircle duration={modeIdleTimer()} />
 		</div>
 	);
 }
