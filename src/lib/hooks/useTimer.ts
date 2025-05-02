@@ -11,6 +11,7 @@ import type {
 	MainToWorkerMessage,
 	WorkerToMainMessage,
 } from "@/types/workerMessages";
+import { Preahvihear } from "next/font/google";
 
 export function useTimer() {
 	const [timer, setTimer] = useAtom(timerAtom);
@@ -192,6 +193,7 @@ export function useTimer() {
 		// 6. 自動開始する場合、Worker に START メッセージを送信
 		if (shouldAutoStart) {
 			// ★ 自動実行する場合: 直接次のモードへ
+
 			setTimer((prev) => ({
 				...prev,
 				mode: nextMode,

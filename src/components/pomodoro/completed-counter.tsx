@@ -5,7 +5,7 @@ export function CompletedCounter() {
 	const [completedCount] = useAtom(todayCompletedCountAtom);
 
 	return (
-		<div className="flex flex-col items-center justify-center mt-8">
+		<div className="flex flex-col items-center justify-center">
 			<p className="text-sm text-muted-foreground">
 				Today&apos;s completed sessions
 			</p>

@@ -61,9 +61,9 @@ export function Timer() {
 	}, [timer.mode, timer.timeRemaining, formatTime, modeText]);
 
 	return (
-		<div className="w-full h-min grid grid-rows-[30px_25px_1fr]  gap-6 text-center justify-items-center items-start">
+		<div className="w-full h-min grid grid-rows-[30px_25px_1fr]  gap-2 text-center justify-items-center items-start relative">
 			<motion.span
-				className="tracking-[8px] leading-5 text-sm pl-2.5 border-double border-3 border-foreground/80 text-foreground/80 w-fit relative"
+				className="tracking-[8px] leading-5 text-sm pl-2.5 border-double border-3 border-foreground/80 text-foreground/80 w-fit relative linear"
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				exit={{ opacity: 0 }}
@@ -76,7 +76,7 @@ export function Timer() {
 				<AnimatePresence>
 					{timer.pendingNextMode && timer.mode === "idle" && (
 						<motion.span
-							className="text-sm text-foreground/80"
+							className="text-sm text-foreground/80 linear"
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
 							exit={{ opacity: 0 }}

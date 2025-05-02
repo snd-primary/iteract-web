@@ -1,3 +1,5 @@
+"use client";
+
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -78,7 +80,7 @@ export function Settings() {
 				variant="ghost"
 				size="icon"
 				onClick={openSettings}
-				className="absolute top-4 left-4 rounded-full"
+				className="rounded-full"
 			>
 				<GearIcon className="h-5 w-5" />
 				<span className="sr-only">Settings</span>

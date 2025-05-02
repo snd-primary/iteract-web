@@ -22,6 +22,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 			// 既存のアニメーションをクリア
 			resetWithEasing();
 		}
+		console.log("デュレーションの値", duration);
 
 		const element = divRef.current;
 		if (!element) return;
@@ -42,7 +43,6 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 				resetWithEasing();
 			}
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [duration]);
 
 	// リセット時にイージングを付与する関数
@@ -100,8 +100,11 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 	}, [timer.isRunning, timer.mode]);
 
 	return (
-		<div className="w-full h-full flex justify-center items-center relative">
-			<div ref={divRef} className={styles.progressCircle}>
+		<div className="w-full h-max max-w-full  flex justify-center items-center relative">
+			<div
+				ref={divRef}
+				className={`${styles.progressCircle} ${styles.bgPttern}`}
+			>
 				<div className={styles.triangleUp} />
 				<div className={styles.triangleDown} />
 			</div>

@@ -1,17 +1,11 @@
 "use client";
 
-import { Container } from "@/components/layout/container";
-import {
-	Timer,
-	Controls,
-	CompletedCounter,
-	ThemeToggle,
-} from "@/components/pomodoro";
-import { Settings } from "@/components/pomodoro/setting";
+import { Timer, Controls, CompletedCounter } from "@/components/pomodoro";
 import { ProgressCircle } from "@/components/ui/progress-circle/progress-circle";
 import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
 import { usePersistState } from "@/lib/hooks/usePersistState";
 import { settingsAtom } from "@/store/settings";
+import { timerAtom } from "@/store/timer";
 import { useAtom } from "jotai";
 
 export default function Home() {
@@ -22,22 +16,26 @@ export default function Home() {
 	usePersistState();
 
 	const [settings] = useAtom(settingsAtom);
+	const [timer] = useAtom(timerAtom);
+
+	const circleDuration = (): number => {
+		switch (timer.mode) {
+			case "focus":
+				return settings.workTime;
+
+			default:
+				return 0; // デフォルト値を返す
+		}
+	};
 
 	return (
-		<main className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
-			<ThemeToggle />
-			<Settings />
-
-			<Container>
-				<h1 className="text-3xl font-bold mb-8">Pomodoro Timer</h1>
-
-				<div className="w-full grid grid-cols-1 grid-rows-[1fr_min-content] gap-12 bg-card justify-center justify-self-center border-2 px-6 py-8 relative">
-					<Timer />
-					<ProgressCircle duration={settings.workTime} />
-					<Controls />
-				</div>
-				<CompletedCounter />
-			</Container>
+		<main className="max-w-full w-full h-fit grid grid-cols-1 grid-rows-[1fr_70px] gap-12 items-center justify-center bg-background text-foreground px-4 relative">
+			<div className="w-full grid grid-cols-1 gap-16 justify-center justify-self-center md:border-1 md:p-8  relative">
+				<Timer />
+				<ProgressCircle duration={circleDuration()} />
+				<Controls />
+			</div>
+			<CompletedCounter />
 		</main>
 	);
 }

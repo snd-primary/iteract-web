@@ -1,3 +1,4 @@
+"use client";
 import { settingsAtom, type SoundType } from "@/store/settings";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
