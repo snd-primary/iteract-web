@@ -1,31 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import { useTimer } from "@/lib/hooks";
 import styles from "./progress-circle.module.css";
-import { timerAtom } from "@/store/timer";
+import { timerAtom, type TimerMode } from "@/store/timer";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
+import { type PomodoroSettings, settingsAtom } from "@/store/settings";
 
-type Props = {
+/* type Props = {
 	duration: number; // duration in minutes
-};
-
-export const ProgressCircle: React.FC<Props> = ({ duration }) => {
+} */ export const ProgressCircle: React.FC = () => {
 	const animationRef = useRef<Animation | null>(null);
 	const divRef = useRef<HTMLDivElement | null>(null);
 
 	const [timer] = useAtom(timerAtom);
+	const [settings] = useAtom(settingsAtom);
 
-	// Animationの初期化 マウント時に1度実行される
-	useEffect(() => {
-		if (animationRef.current) {
-			// 既存のアニメーションをクリア
-			resetWithEasing();
+	// モードに基づいて時間を設定する
+	const calculateDuration = (mode: TimerMode, settings: PomodoroSettings) => {
+		switch (mode) {
+			case "focus":
+				return settings.workTime * 60;
+			case "shortBreak":
+				return settings.shortBreakTime * 60;
+			case "longBreak":
+				return settings.longBreakTime * 60;
+			default:
+				return settings.workTime * 60; // デフォルトは作業時間
 		}
+	};
 
+	// 現在のモードに基づいた時間を取得
+	const duration = calculateDuration(timer.mode, settings);
+
+	// アニメーションを作成・更新する関数
+	const createOrUpdateAnimation = () => {
 		const element = divRef.current;
 		if (!element) return;
 
+		// 既存のアニメーションをクリア
+		if (animationRef.current) {
+			animationRef.current.cancel();
+		}
+
+		// 新しいアニメーションを作成
 		const animation = element.animate(
 			[{ "--angle": "0deg" }, { "--angle": "360deg" }],
 			{
@@ -33,16 +52,28 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 				easing: "linear",
 			},
 		);
-		animation.pause();
+
+		// タイマーの状態に応じてアニメーションを制御
+		if (timer.isRunning) {
+			animation.play();
+		} else {
+			animation.pause();
+		}
 
 		animationRef.current = animation;
+	};
+
+	// モードまたは設定が変わった時にアニメーションを更新
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		createOrUpdateAnimation();
 
 		return () => {
 			if (animationRef.current) {
-				resetWithEasing();
+				animationRef.current.cancel();
 			}
 		};
-	}, [duration]);
+	}, [duration, timer.mode, settings]);
 
 	// リセット時にイージングを付与する関数
 	const resetWithEasing = () => {
@@ -67,20 +98,7 @@ export const ProgressCircle: React.FC<Props> = ({ duration }) => {
 
 		// リセットアニメーション完了後に元のアニメーションをキャンセル
 		resetAnimation.onfinish = () => {
-			if (animationRef.current) {
-				animationRef.current.cancel();
-
-				// 新しいアニメーションを作成
-				const newAnimation = element.animate(
-					[{ "--angle": "0deg" }, { "--angle": "360deg" }],
-					{
-						duration: Number(duration * 1000),
-						easing: "linear",
-					},
-				);
-				newAnimation.pause();
-				animationRef.current = newAnimation;
-			}
+			createOrUpdateAnimation();
 		};
 	};
 

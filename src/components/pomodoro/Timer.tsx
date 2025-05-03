@@ -102,7 +102,7 @@ export function Timer() {
 					}`}
 				</p>
 			</div>
-			<ProgressCircle duration={modeIdleTimer()} />
+			<ProgressCircle />
 		</div>
 	);
 }

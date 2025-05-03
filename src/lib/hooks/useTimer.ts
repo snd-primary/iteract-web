@@ -336,5 +336,6 @@ export function useTimer() {
 		resumeTimer,
 		resetTimer,
 		skipToNext,
+		calculateDuration,
 	};
 }

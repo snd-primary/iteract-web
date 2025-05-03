@@ -39,9 +39,7 @@ self.onmessage = (event: MessageEvent<MainToWorkerMessage>) => {
 			break;
 		case "RESUME":
 			// isRunningでなく、interval === null で判定する方が確実な場合もある
-			console.log("タイマーの残時間:", timeRemainingOnPause);
 			if (!isRunning && targetEndTime > 0 && timeRemainingOnPause > 0) {
-				console.log("タイマー再開:", timeRemainingOnPause);
 				// 停止していた時間分、終了目標時刻を未来にずらすのではなく、
 				// 残り時間を使って新しい終了目標時刻を計算する
 				targetEndTime = Date.now() + timeRemainingOnPause;
@@ -59,7 +57,6 @@ self.onmessage = (event: MessageEvent<MainToWorkerMessage>) => {
 
 function startTimer() {
 	if (isRunning || targetEndTime <= Date.now()) {
-		console.log("StartTimer: Already running or finished");
 		return; // 既に実行中か、既に終了時刻を過ぎていたら何もしない
 	}
 
@@ -82,7 +79,6 @@ function startTimer() {
 
 		// タイマーが完了した場合
 		if (remainingMilliseconds === 0) {
-			console.log("COMPLETE"); // デバッグ用ログ
 			postMessage({ type: "COMPLETE" } as WorkerToMainMessage);
 			cleanupTimer(); // タイマー完了後にクリーンアップ
 		}
@@ -91,21 +87,17 @@ function startTimer() {
 
 function pauseTimer() {
 	if (!isRunning || interval === null) {
-		console.log("PauseTimer: Not running");
 		return; // 実行中でなければ何もしない
 	}
-	console.log("PauseTimer: Pausing...");
 
 	// ポーズする前に現在の残り時間を計算して保存
 	const now = Date.now();
 	timeRemainingOnPause = Math.max(0, targetEndTime - now);
 
 	cleanupTimer(); // isRunning = false もここに含まれる
-	console.log("PauseTimer: Paused. Remaining ms:", timeRemainingOnPause);
 }
 
 function resetTimer() {
-	console.log("ResetTimer: Resetting...");
 	cleanupTimer();
 	targetEndTime = 0;
 	timeRemainingOnPause = 0;
@@ -119,18 +111,9 @@ function resetTimer() {
 
 // インターバルをクリアし、実行中フラグをリセットする共通関数
 function cleanupTimer() {
-	console.log(
-		`CleanupTimer: Called. Current interval ID: ${interval}, isRunning: ${isRunning}`,
-	); // ★ログ追加
-
 	if (interval !== null) {
-		console.log(`CleanupTimer: Clearing interval ID: ${interval}`); // ★ログ追加
-
 		self.clearInterval(interval);
 		interval = null;
-
-		console.log("CleanupTimer: Interval cleared and set to null."); // ★ログ追加
 	}
 	isRunning = false;
-	console.log("CleanupTimer: isRunning set to false."); // ★ログ追加
 }
