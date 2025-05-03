@@ -27,5 +27,7 @@ export const defaultSettings: PomodoroSettings = {
 	soundType: "beep",
 };
 
+export const settingsOpenAtom = atom(false); // Settings open state atom
+
 // Settings atom
 export const settingsAtom = atom<PomodoroSettings>(defaultSettings);

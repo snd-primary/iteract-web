@@ -30,9 +30,9 @@ export const InputTime: React.FC<Props> = ({ isMinutes = true, ...props }) => {
 					max={props.max}
 					value={props.value}
 					onChange={props.onChange}
-					className="max-w-16 border border-input rounded-sm outline py-2 text-sm"
+					className="max-w-16 border border-input outline py-2 text-sm"
 				/>
-				{isMinutes && <span>min</span>}
+				{isMinutes ? <span>min</span> : <span>times</span>}
 			</div>
 			{props.annotation && (
 				<p className="text-xs text-muted-foreground mt-1 pl-1">

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/header";
+import { Settings } from "@/components/pomodoro/setting";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -75,7 +76,7 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} ${departureMono.variable} antialiased h-dvh`}
 			>
 				<Header />
-				<div className="font-departure w-full h-full grid grid-cols-[minmax(320px,480px)]  place-content-center place-items-center ">
+				<div className="font-departure w-full h-full grid grid-cols-[minmax(320px,450px)]  place-content-center place-items-center ">
 					{children}
 				</div>
 			</body>

@@ -6,6 +6,7 @@ import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ProgressCircle } from "../ui/progress-circle/progress-circle";
+import { ItemIndicator } from "@radix-ui/react-select";
 
 export function Timer() {
 	const [timer] = useAtom(timerAtom);
@@ -42,7 +43,7 @@ export function Timer() {
 			case "longBreak":
 				return settings.longBreakTime * 60;
 			default:
-				return 0;
+				return settings.workTime * 60; // Default to work time
 		}
 	}, [settings, timer.pendingNextMode]);
 
@@ -62,7 +63,7 @@ export function Timer() {
 	}, [timer.mode, timer.timeRemaining, formatTime, modeText]);
 
 	return (
-		<div className="w-full h-min grid grid-rows-[30px_25px_1fr]  gap-2 text-center justify-items-center items-start relative">
+		<div className="w-full h-min grid grid-rows-[30px_25px_1fr_180px]  gap-2 text-center justify-items-center  items-center relative">
 			<motion.span
 				className="tracking-[8px] leading-5 text-sm pl-2.5 border-double border-3 border-foreground/80 text-foreground/80 w-fit relative linear"
 				initial={{ opacity: 0 }}
@@ -90,7 +91,7 @@ export function Timer() {
 				</AnimatePresence>
 			</div>
 
-			<div className="CUSTOM_TIME_BORDER p-2 w-full grid gap-2 grid-rows-[1fr_20px] text-foreground/90">
+			<div className="CUSTOM_TIME_BORDER p-2 w-full grid gap-2 grid-rows-[1fr_20px] text-foreground/90 pb-6">
 				<div className="self-center w-full h-full text-7xl font-departure mb-0 font-bold ">
 					{timer.mode === "idle"
 						? formatTime(modeIdleTimer())
@@ -102,6 +103,7 @@ export function Timer() {
 					}`}
 				</p>
 			</div>
+
 			<ProgressCircle />
 		</div>
 	);

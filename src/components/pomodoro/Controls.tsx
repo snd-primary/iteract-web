@@ -35,21 +35,24 @@ export function Controls() {
 			<div className="text-xs relative tracking-[6px] CUSTOM_CONTROLS_BORDER opacity-40">
 				CONTROLS
 			</div>
-			<div className="grid grid-cols-3 gap-4 w-full h-auto">
+			<div className="grid grid-cols-3 gap-2 w-full h-auto">
 				{!timer.isRunning ? (
 					<Button onClick={handleStartOrResume} size="lg" className="">
 						<PlayIcon className=" h-4 w-4" />
-						<span>{timer.mode === "idle" ? "Start" : "Resume"}</span>
+						<span className="text-lg">
+							{timer.mode === "idle" ? "Start" : "Resume"}
+						</span>
 					</Button>
 				) : (
 					<Button onClick={pauseTimer} variant="outline" size="lg" className="">
 						<PauseIcon className="h-4 w-4" />
-						<span>Pause</span>
+						<span className="text-lg">Pause</span>
 					</Button>
 				)}
 				<Button onClick={resetTimer} variant="ghost" size="lg">
 					<ReloadIcon className="h-4 w-4" />
-					Reset
+
+					<span className="text-lg">Reset</span>
 				</Button>
 
 				<Button
@@ -59,7 +62,7 @@ export function Controls() {
 					disabled={timer.mode === "idle"}
 				>
 					<ResumeIcon className="h-4 w-4" />
-					Skip
+					<span className="text-lg">Skip</span>
 				</Button>
 			</div>
 		</div>
