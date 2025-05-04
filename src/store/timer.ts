@@ -1,11 +1,11 @@
 import { atom } from "jotai";
 
 // Timer modes
-export type TimerMode = "focus" | "shortBreak" | "longBreak" | "idle";
+export type TimerMode = "focus" | "shortBreak" | "longBreak" | "ready";
 
 // Timer state interface
 export interface TimerState {
-	mode: TimerMode | "idle"; //タイマーの状態
+	mode: TimerMode | "ready"; //タイマーの状態
 	timeRemaining: number; // タイマーの残時間
 	isRunning: boolean; //タイマーが実行されているかどうか
 	completedPomodoros: number; //そのセッションでタイマーが満了した回数
@@ -15,7 +15,7 @@ export interface TimerState {
 
 // Initial timer state
 export const initialTimerState: TimerState = {
-	mode: "idle",
+	mode: "ready",
 	timeRemaining: 0,
 	isRunning: false,
 	completedPomodoros: 0,

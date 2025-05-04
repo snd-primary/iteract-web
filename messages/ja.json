@@ -1,0 +1,59 @@
+{
+	"app": {
+		"title": "ポモドーロタイマー"
+	},
+	"timer": {
+		"mode": {
+			"focus": "作業中",
+			"shortBreak": "小休憩",
+			"longBreak": "長休憩",
+			"ready": "停止中"
+		},
+		"nextMode": "次のモード",
+		"pomodoro": "セッション"
+	},
+	"controls": {
+		"title": "操作",
+		"start": "開始",
+		"resume": "再開",
+		"pause": "一時停止",
+		"reset": "リセット",
+		"skip": "スキップ"
+	},
+	"settings": {
+		"title": "設定",
+		"timer": {
+			"title": "タイマー（分）",
+			"work": "作業",
+			"shortBreak": "小休憩",
+			"longBreak": "長休憩",
+			"longBreakInterval": "長休憩までの間隔",
+			"intervalNote": "長休憩までの作業セッション数"
+		},
+		"autoStart": {
+			"title": "自動開始",
+			"breaks": "休憩を自動的に開始",
+			"work": "作業を自動的に開始"
+		},
+		"sound": {
+			"title": "通知音",
+			"test": "テスト",
+			"selectSound": "通知音を選択"
+		},
+		"buttons": {
+			"save": "保存",
+			"cancel": "キャンセル"
+		}
+	},
+	"stats": {
+		"todayCompleted": "今日の完了セッション数"
+	},
+	"theme": {
+		"light": "ダークモードに切り替え",
+		"dark": "ライトモードに切り替え"
+	},
+	"units": {
+		"min": "分",
+		"times": "回"
+	}
+}

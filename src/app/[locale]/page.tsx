@@ -4,6 +4,7 @@ import { Timer, Controls, CompletedCounter } from "@/components/pomodoro";
 import { Settings } from "@/components/pomodoro/setting";
 import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
 import { usePersistState } from "@/lib/hooks/usePersistState";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
 	// Initialize app state from localStorage

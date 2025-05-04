@@ -17,10 +17,13 @@ import { SettingBlock } from "../layout/setting/setting-block";
 import { InputTime } from "./input-time";
 import { useSettings } from "@/lib/hooks/useSettings";
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
 
 const soundTypes: SoundType[] = ["bell", "chime", "beep"];
 
 export function Settings() {
+	const t = useTranslations("settings");
+
 	const {
 		closeSettings,
 		saveSettings,
@@ -47,7 +50,7 @@ export function Settings() {
 						<div className="bg-card  border border-border p-3 w-full max-w-md mx-auto h-fit max-h-fit grid grid-cols-1 gap-6">
 							{/* タイトルと閉じるボタン */}
 							<div className="flex justify-between items-center ">
-								<h2 className="text-xl font-semibold">Settings</h2>
+								<h2 className="text-xl font-semibold">{t("title")}</h2>
 								<Button variant="ghost" size="icon" onClick={closeSettings}>
 									<Cross1Icon className="h-5 w-5" />
 									<span className="sr-only">Close</span>
@@ -55,10 +58,10 @@ export function Settings() {
 							</div>
 							{/* セッティング項目 */}
 							<div className="grid grid-cols-1 gap-4">
-								<SettingBlock title="Timer (minutes)">
+								<SettingBlock title={t("timer.title")}>
 									<div className="grid grid-cols-2 gap-y-8">
 										<InputTime
-											label="Work"
+											label={t("timer.work")}
 											id="workTime"
 											name="workTime"
 											min="1"
@@ -67,7 +70,7 @@ export function Settings() {
 											onChange={handleChange}
 										/>
 										<InputTime
-											label="Short Break"
+											label={t("timer.shortBreak")}
 											id="shortBreakTime"
 											name="shortBreakTime"
 											min="1"
@@ -76,7 +79,7 @@ export function Settings() {
 											onChange={handleChange}
 										/>
 										<InputTime
-											label="Long Break"
+											label={t("timer.longBreak")}
 											id="longBreakTime"
 											name="longBreakTime"
 											min="1"
@@ -85,7 +88,7 @@ export function Settings() {
 											onChange={handleChange}
 										/>
 										<InputTime
-											label="Long Break Interval"
+											label={t("timer.longBreakInterval")}
 											id="longBreakInterval"
 											name="longBreakInterval"
 											min="1"
@@ -98,7 +101,7 @@ export function Settings() {
 									</div>
 								</SettingBlock>
 
-								<SettingBlock title="Auto Start">
+								<SettingBlock title={t("autoStart.title")}>
 									<div className="space-y-2">
 										<div className="flex items-center">
 											<Checkbox
@@ -109,7 +112,7 @@ export function Settings() {
 												className="mr-2"
 											/>
 											<label htmlFor="autoStartBreak" className="text-sm">
-												Auto-start breaks
+												{t("autoStart.breaks")}
 											</label>
 										</div>
 										<div className="flex items-center">
@@ -121,13 +124,13 @@ export function Settings() {
 												className="mr-2"
 											/>
 											<label htmlFor="autoStartWork" className="text-sm">
-												Auto-start work sessions
+												{t("autoStart.work")}
 											</label>
 										</div>
 									</div>
 								</SettingBlock>
 
-								<SettingBlock title="Alert Sound">
+								<SettingBlock title={t("sound.title")}>
 									<div className="w-full h-full items-center flex justify-start gap-8">
 										<Select
 											value={tempSettings.soundType}
@@ -171,7 +174,7 @@ export function Settings() {
 											}}
 										>
 											<SpeakerLoudIcon width={16} />
-											test
+											{t("sound.test")}
 										</Button>
 									</div>
 									<div className="flex items-center gap-2 pl-2">
@@ -196,9 +199,9 @@ export function Settings() {
 							{/* キャンセル・閉じるボタン */}
 							<div className="w-full h-full  flex justify-end gap-6 ">
 								<Button variant="outline" onClick={closeSettings}>
-									Cancel
+									{t("buttons.cancel")}
 								</Button>
-								<Button onClick={saveSettings}>Save</Button>
+								<Button onClick={saveSettings}>{t("buttons.save")}</Button>
 							</div>
 						</div>
 					</motion.div>

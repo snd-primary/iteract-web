@@ -5,7 +5,7 @@ import type {
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // WebWorker自体の状態を示す型。※タイマーの状態ではないことに留意
-type WorkerStatus = "idle" | "initializing" | "ready" | "error" | "terminated";
+type WorkerStatus = "ready" | "initializing" | "ready" | "error" | "terminated";
 
 //Workerからメッセージが送られてきた時,メイン側で行う処理のための型定義
 interface UseTimerWorkerProps {
@@ -25,7 +25,7 @@ export const useTimerWorker = ({
 }: UseTimerWorkerProps): UseTimerWorkerReturn => {
 	const workerRef = useRef<Worker | null>(null);
 
-	const [workerStatus, setWorkerStatus] = useState<WorkerStatus>("idle");
+	const [workerStatus, setWorkerStatus] = useState<WorkerStatus>("ready");
 
 	const onMessageRef = useRef(onMessage);
 	const onErrorRef = useRef(onError);

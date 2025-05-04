@@ -214,11 +214,11 @@ export function useTimer() {
 				}, 1000);
 			}
 		} else {
-			// ★ 自動実行しない場合: idle 状態にし、次のモードを pending に
+			// ★ 自動実行しない場合: ready 状態にし、次のモードを pending に
 			setTimer((prev) => ({
 				...prev,
-				mode: "idle", // idle 状態へ移行
-				timeRemaining: 0, // idle なので残り時間は 0
+				mode: "ready", // ready 状態へ移行
+				timeRemaining: 0, // ready なので残り時間は 0
 				isRunning: false, // 実行しない
 				completedPomodoros: newCompletedPomodoros, // ポモドーロ数は更新
 				currentSession: newCurrentSession, // セッション数も更新
@@ -320,7 +320,7 @@ export function useTimer() {
 		// タイマーの状態をリセットする
 		setTimer({
 			...timer,
-			mode: "idle",
+			mode: "ready",
 			timeRemaining: 0,
 			isRunning: false,
 		});

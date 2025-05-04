@@ -1,22 +1,30 @@
 import type { Metadata } from "next/dist/types";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DotGothic16, Orbit } from "next/font/google";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
 import Header from "@/components/header";
-import { Settings } from "@/components/pomodoro/setting";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const dotGothic16 = DotGothic16({
+	variable: "--font-dot-gothic-16",
 	subsets: ["latin"],
+	weight: "400",
+	style: "normal",
+	display: "swap",
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const orbit = Orbit({
+	variable: "--font-orbit",
 	subsets: ["latin"],
+	weight: "400",
+	style: "normal",
+	display: "swap",
 });
 
 const departureMono = localFont({
-	src: "../font/DepartureMono-Regular.woff2",
+	src: "../../font/DepartureMono-Regular.woff2",
 	variable: "--font-departure-mono",
 });
 
@@ -62,23 +70,45 @@ const InitializeTheme = () => {
 	return <script dangerouslySetInnerHTML={{ __html: script }} />;
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
+	params,
 }: Readonly<{
 	children: React.ReactNode;
+	params: Promise<{ locale: string }>;
 }>) {
+	const { locale } = await params;
+	if (!hasLocale(routing.locales, locale)) {
+		notFound();
+	}
+
+	const fontFamilyClass = () => {
+		switch (locale) {
+			case "ja":
+				return "font-ja";
+			case "en":
+				return "font-en";
+			case "ko":
+				return "font-ko";
+		}
+	};
+
 	return (
-		<html lang="ja" suppressHydrationWarning>
+		<html
+			lang={locale}
+			suppressHydrationWarning
+			className={`${departureMono.variable} ${dotGothic16.variable} ${orbit.variable}`}
+		>
 			<head>
 				<InitializeTheme />
 			</head>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} ${departureMono.variable} antialiased h-dvh`}
-			>
-				<Header />
-				<div className="font-departure w-full h-full grid grid-cols-[minmax(320px,450px)]  place-content-center place-items-center ">
-					{children}
-				</div>
+			<body className={`${fontFamilyClass()} antialiased h-dvh`}>
+				<NextIntlClientProvider>
+					<Header />
+					<div className="w-full h-full grid grid-cols-[minmax(320px,450px)]  place-content-center place-items-center">
+						{children}
+					</div>
+				</NextIntlClientProvider>
 			</body>
 		</html>
 	);

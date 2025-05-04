@@ -1,0 +1,59 @@
+{
+	"app": {
+		"title": "뽀모도로 타이머"
+	},
+	"timer": {
+		"mode": {
+			"focus": "집중",
+			"shortBreak": "짧은 휴식",
+			"longBreak": "긴 휴식",
+			"ready": "준비"
+		},
+		"nextMode": "다음 모드",
+		"pomodoro": "뽀모도로"
+	},
+	"controls": {
+		"title": "조작",
+		"start": "시작",
+		"resume": "재개",
+		"pause": "일시정지",
+		"reset": "초기화",
+		"skip": "건너뛰기"
+	},
+	"settings": {
+		"title": "설정",
+		"timer": {
+			"title": "타이머 (분)",
+			"work": "작업",
+			"shortBreak": "짧은 휴식",
+			"longBreak": "긴 휴식",
+			"longBreakInterval": "긴 휴식 간격",
+			"intervalNote": "긴 휴식 전 작업 세션 수"
+		},
+		"autoStart": {
+			"title": "자동 시작",
+			"breaks": "휴식 자동 시작",
+			"work": "작업 자동 시작"
+		},
+		"sound": {
+			"title": "알림 소리",
+			"test": "테스트",
+			"selectSound": "알림 소리 선택"
+		},
+		"buttons": {
+			"save": "저장",
+			"cancel": "취소"
+		}
+	},
+	"stats": {
+		"todayCompleted": "오늘 완료한 세션"
+	},
+	"theme": {
+		"light": "다크 테마로 전환",
+		"dark": "라이트 테마로 전환"
+	},
+	"units": {
+		"min": "분",
+		"times": "회"
+	}
+}

@@ -23,7 +23,7 @@ export const SVGProgressCircle: React.FC<Props> = ({ timer, settings }) => {
 	}, [timer.mode, settings]);
 
 	const progressRatio = useMemo(() => {
-		if (timer.mode === "idle") return 1;
+		if (timer.mode === "ready") return 1;
 		return timer.timeRemaining / maxTime;
 	}, [timer.mode, timer.timeRemaining, maxTime]);
 

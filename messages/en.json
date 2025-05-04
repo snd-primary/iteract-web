@@ -1,0 +1,59 @@
+{
+	"app": {
+		"title": "Pomodoro Timer"
+	},
+	"timer": {
+		"mode": {
+			"focus": "FOCUS",
+			"shortBreak": "SHORT BREAK",
+			"longBreak": "LONG BREAK",
+			"ready": "READY"
+		},
+		"nextMode": "NEXT MODE",
+		"pomodoro": "Pomodoro"
+	},
+	"controls": {
+		"title": "CONTROLS",
+		"start": "Start",
+		"resume": "Resume",
+		"pause": "Pause",
+		"reset": "Reset",
+		"skip": "Skip"
+	},
+	"settings": {
+		"title": "Settings",
+		"timer": {
+			"title": "Timer (minutes)",
+			"work": "Work",
+			"shortBreak": "Short Break",
+			"longBreak": "Long Break",
+			"longBreakInterval": "Long Break Interval",
+			"intervalNote": "Number of work sessions before a long break"
+		},
+		"autoStart": {
+			"title": "Auto Start",
+			"breaks": "Auto-start breaks",
+			"work": "Auto-start work sessions"
+		},
+		"sound": {
+			"title": "Alert Sound",
+			"test": "test",
+			"selectSound": "Select Alerm sound"
+		},
+		"buttons": {
+			"save": "Save",
+			"cancel": "Cancel"
+		}
+	},
+	"stats": {
+		"todayCompleted": "Today's completed sessions"
+	},
+	"theme": {
+		"light": "Switch to dark theme",
+		"dark": "Switch to light theme"
+	},
+	"units": {
+		"min": "min",
+		"times": "times"
+	}
+}

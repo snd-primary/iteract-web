@@ -1,23 +1,20 @@
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";
-// import { Play, Pause, RotateCcw, SkipForward } from "lucide-react";
-import {
-	PlayIcon,
-	PauseIcon,
-	ReloadIcon,
-	ResumeIcon,
-} from "@radix-ui/react-icons";
-
+import { PauseIcon } from "@radix-ui/react-icons";
 import { timerAtom } from "@/store/timer";
 import { useTimer } from "@/lib/hooks/useTimer";
+import { useTranslations } from "next-intl";
+
 export function Controls() {
 	const [timer] = useAtom(timerAtom);
 	const { startTimer, pauseTimer, resumeTimer, resetTimer, skipToNext } =
 		useTimer();
 
+	const t = useTranslations("controls");
+
 	// Start or resume the timer
 	const handleStartOrResume = () => {
-		if (timer.mode === "idle") {
+		if (timer.mode === "ready") {
 			//  pendingNextMode があればそれを、なければ 'work' を開始
 			const modeToStart = timer.pendingNextMode ?? "focus";
 			startTimer(modeToStart);
@@ -32,37 +29,80 @@ export function Controls() {
 
 	return (
 		<div className="grid place-items-center gap-4">
-			<div className="text-xs relative tracking-[6px] CUSTOM_CONTROLS_BORDER opacity-40">
+			<div className="text-xs relative tracking-[6px] CUSTOM_CONTROLS_BORDER font-departure opacity-40">
 				CONTROLS
 			</div>
 			<div className="grid grid-cols-3 gap-2 w-full h-auto">
 				{!timer.isRunning ? (
-					<Button onClick={handleStartOrResume} size="lg" className="">
-						<PlayIcon className=" h-4 w-4" />
-						<span className="text-lg">
-							{timer.mode === "idle" ? "Start" : "Resume"}
+					<Button onClick={handleStartOrResume} size="lg" className="lg">
+						<svg
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							className="size-4"
+						>
+							<title>play</title>
+							<path
+								d="M18 11V10H17V9H15V7H13V5H11V3H5V21H11V20V19H13V17H15V15H17V14H18V13H19V11H18ZM13 13V15H11V17H9V19H7V5H9V7H11V9H13V11H15V13H13Z"
+								fill="currentColor"
+							/>
+						</svg>
+						{/* <span>{timer.mode === "ready" ? t("start") : t("resume")}</span> */}
+						<span className="font-departure">
+							{timer.mode === "ready" ? "Start" : "Resume"}
 						</span>
 					</Button>
 				) : (
-					<Button onClick={pauseTimer} variant="outline" size="lg" className="">
-						<PauseIcon className="h-4 w-4" />
-						<span className="text-lg">Pause</span>
+					<Button onClick={pauseTimer} variant="outline" size="lg">
+						<PauseIcon className="size-4" />
+						<span className="font-departure">Pause</span>
+						{/* <span>{t("pause")}</span> */}
 					</Button>
 				)}
 				<Button onClick={resetTimer} variant="ghost" size="lg">
-					<ReloadIcon className="h-4 w-4" />
-
-					<span className="text-lg">Reset</span>
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						className="size-4"
+					>
+						<title>reset</title>
+						<path
+							d="M4 6V5H5V4H6V3H16V4H17V5H18V6H19V5V4H21V10H15V8H17V7H16V6H15V5H8V6H7V7H6V8H5V16H6V17H7V18H8V19H15V18H16V17H17V16H18V15H20V18H19V19H18V20H17V21H6V20H5V19H4V18H3V6H4Z"
+							fill="currentColor"
+						/>
+					</svg>
+					<span className="font-departure">Reset</span>
+					{/* <span className="">{t("reset")}</span> */}
 				</Button>
 
 				<Button
 					onClick={skipToNext}
 					variant="ghost"
 					size="lg"
-					disabled={timer.mode === "idle"}
+					disabled={timer.mode === "ready"}
 				>
-					<ResumeIcon className="h-4 w-4" />
-					<span className="text-lg">Skip</span>
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						className="size-4"
+					>
+						<title>skip</title>
+						<path
+							d="M10 3H4V21H10V19H12V17H14V15H16V14H17V10H16V9H14V7H12V5H10V3ZM12 13V15H10V17H8V19H6V5H8V7H10V9H12V11H14V13H12Z"
+							fill="currentColor"
+						/>
+						<path d="M20 3H18V21H20V3Z" fill="currentColor" />
+					</svg>
+					{/* <span className="">{t("skip")}</span> */}
+					<span className="font-departure">Skip</span>
 				</Button>
 			</div>
 		</div>

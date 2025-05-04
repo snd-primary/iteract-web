@@ -108,7 +108,7 @@ import { type PomodoroSettings, settingsAtom } from "@/store/settings";
 
 		if (timer.isRunning) {
 			animationRef.current.play();
-		} else if (timer.mode === "idle") {
+		} else if (timer.mode === "ready") {
 			// cancel()の代わりにイージング付きのリセットを呼び出す
 			resetWithEasing();
 		} else {
