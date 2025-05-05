@@ -9,16 +9,16 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 // 型定義を Next.js の標準的な Props 形式に合わせる
 type Props = {
-	params: { locale: string };
+	params: Promise<{ locale: string }>;
 	// searchParams: { [key: string]: string | string[] | undefined }; // 必要なら追加
 };
 
 // Generate dynamic metadata for the page
 export async function generateMetadata(
 	{ params }: Props, // ここで Props 型を使用
-	// parent: ResolvingMetadata // 必要であれば parent 引数も型定義に追加
-): Promise<Metadata> {
-	const { locale } = params;
+): // parent: ResolvingMetadata // 必要であれば parent 引数も型定義に追加
+Promise<Metadata> {
+	const { locale } = await params;
 	const t = await getTranslations({ locale, namespace: "Metadata" });
 	const title = t("homeTitle");
 	const description = t("homeDescription");
@@ -66,7 +66,7 @@ export async function generateMetadata(
 }
 
 // generateStaticParams も定義しておく (静的ビルドのため)
-export async function generateStaticParams() {
+export function generateStaticParams(): { locale: string }[] {
 	return routing.locales.map((locale) => ({
 		locale: locale,
 	}));
