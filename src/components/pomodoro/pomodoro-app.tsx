@@ -1,4 +1,5 @@
 "use client";
+
 import { useInitializeApp, usePersistState } from "@/lib/hooks";
 import { Settings } from "./setting";
 import { Timer } from "./timer";
