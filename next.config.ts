@@ -2,9 +2,6 @@ import type { NextConfig } from "next";
 import createNextIntPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-	experimental: {
-		viewTransition: true,
-	},
 	webpack: (config) => {
 		config.module.rules.push({
 			test: /\.svg$/,

@@ -5,10 +5,10 @@ import { timerAtom } from "@/store/timer";
 import { settingsAtom } from "@/store/settings";
 import { useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ProgressCircle } from "../ui/progress-circle/progress-circle";
 import { useTranslations } from "next-intl";
 
 import { cva } from "class-variance-authority";
+import ProgressCircle from "../progress-circle";
 
 const statusText = cva(
 	"tracking-[8px] leading-5 text-sm pl-2.5 border-double border-3 w-fit relative linear pt-0.5 pb-1 text-shadow-[0_0_3px]",
@@ -130,7 +130,9 @@ export function Timer() {
 				</p>
 			</div>
 
-			<ProgressCircle />
+			<ProgressCircle progress={timer.timeRemaining} />
+
+			{/* <ProgressCircle /> */}
 		</div>
 	);
 }

@@ -65,11 +65,8 @@ Promise<Metadata> {
 	};
 }
 
-// generateStaticParams も定義しておく (静的ビルドのため)
-export function generateStaticParams(): { locale: string }[] {
-	return routing.locales.map((locale) => ({
-		locale: locale,
-	}));
+export function generateStaticParams() {
+	return [{ locale: "en" }, { locale: "ja" }, { locale: "ko" }];
 }
 
 export default function Home() {
