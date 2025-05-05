@@ -11,7 +11,6 @@ import type {
 	MainToWorkerMessage,
 	WorkerToMainMessage,
 } from "@/types/workerMessages";
-import { Preahvihear } from "next/font/google";
 
 export function useTimer() {
 	const [timer, setTimer] = useAtom(timerAtom);

@@ -39,7 +39,6 @@ export function Timer() {
 	const shortBreakMode = t("mode.shortBreak"); // "小休憩"
 	const longBreakMode = t("mode.longBreak"); // "長休憩"
 	const readyMode = t("mode.ready"); // "準備完了"
-	const pomodoroText = t("pomodoro", { number: 1 }); // "ポモドーロ 1回目"
 
 	// Format time as MM:SS
 	const formatTime = useCallback((seconds: number): string => {
@@ -81,13 +80,13 @@ export function Timer() {
 		let title = "Pomodoro Timer";
 
 		if (timer.mode !== "ready") {
-			title = `${formatTime(timer.timeRemaining)} - ${modeText()}`;
+			title = `${formatTime(timer.timeRemaining)} - mode: ${modeText()}`;
 		}
 
 		document.title = title;
 
 		return () => {
-			document.title = "Pomodoro Timer";
+			document.title = "Iteract - Pomodoro Timer & Task Management";
 		};
 	}, [timer.mode, timer.timeRemaining, formatTime, modeText]);
 

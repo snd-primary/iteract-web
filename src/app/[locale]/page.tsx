@@ -1,26 +1,77 @@
-"use client";
+// Import necessary types and functions for metadata
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { PomodoroApp } from "@/components/pomodoro/pomodoro-app";
 
-import { Timer, Controls, CompletedCounter } from "@/components/pomodoro";
-import { Settings } from "@/components/pomodoro/setting";
-import { useInitializeApp } from "@/lib/hooks/useInitializeApp";
-import { usePersistState } from "@/lib/hooks/usePersistState";
-import { useTranslations } from "next-intl";
+// Define metadataBase again or import from layout (ensure consistency)
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+// 型定義を Next.js の標準的な Props 形式に合わせる
+type Props = {
+	params: { locale: string };
+	// searchParams: { [key: string]: string | string[] | undefined }; // 必要なら追加
+};
+
+// Generate dynamic metadata for the page
+export async function generateMetadata(
+	{ params }: Props, // ここで Props 型を使用
+	// parent: ResolvingMetadata // 必要であれば parent 引数も型定義に追加
+): Promise<Metadata> {
+	const { locale } = params;
+	const t = await getTranslations({ locale, namespace: "Metadata" });
+	const title = t("homeTitle");
+	const description = t("homeDescription");
+	const canonicalUrl = `${BASE_URL}/${locale}`;
+
+	// Generate hreflang links
+	const languages: { [key: string]: string } = {};
+	for (const loc of routing.locales) {
+		languages[loc] = `${BASE_URL}/${loc}`;
+	}
+
+	return {
+		title,
+		description,
+		alternates: {
+			canonical: canonicalUrl,
+			languages,
+		},
+		openGraph: {
+			title,
+			description,
+			url: canonicalUrl,
+			siteName: "Iteract", // Consider making this translatable or use defaultTitle
+			images: [
+				{
+					url: "/og-image.png", // Must be an absolute URL or start with /
+					width: 1200,
+					height: 630,
+					alt: "Iteract Pomodoro Timer",
+				},
+			],
+			locale: locale,
+			type: "website", // Or 'application'
+		},
+		twitter: {
+			card: "summary_large_image",
+			title,
+			description,
+			images: ["/og-image.png"], // Must be an absolute URL or start with /
+			// creator: '@your_twitter_handle', // Optional: Add Twitter handle
+		},
+		// Add other metadata like robots if needed
+		// robots: { index: true, follow: true },
+	};
+}
+
+// generateStaticParams も定義しておく (静的ビルドのため)
+export async function generateStaticParams() {
+	return routing.locales.map((locale) => ({
+		locale: locale,
+	}));
+}
 
 export default function Home() {
-	// Initialize app state from localStorage
-	useInitializeApp();
-
-	// Persist state to localStorage
-	usePersistState();
-
-	return (
-		<main className="max-w-full w-full h-fit grid grid-cols-1 grid-rows-[1fr_70px] gap-12 items-center justify-center bg-background text-foreground px-4 relative">
-			<Settings />
-			<div className="w-full grid grid-cols-1 gap-16 justify-center justify-self-center md:border-1 md:p-8 relative">
-				<Timer />
-				<Controls />
-			</div>
-			<CompletedCounter />
-		</main>
-	);
+	return <PomodoroApp />;
 }

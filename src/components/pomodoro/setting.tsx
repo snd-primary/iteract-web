@@ -51,7 +51,12 @@ export function Settings() {
 							{/* タイトルと閉じるボタン */}
 							<div className="flex justify-between items-center ">
 								<h2 className="text-xl font-semibold">{t("title")}</h2>
-								<Button variant="ghost" size="icon" onClick={closeSettings}>
+								<Button
+									variant="ghost"
+									size="icon"
+									onClick={closeSettings}
+									className="size-8"
+								>
 									<Cross1Icon className="h-5 w-5" />
 									<span className="sr-only">Close</span>
 								</Button>

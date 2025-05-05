@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useTimer } from "@/lib/hooks";
 import styles from "./progress-circle.module.css";
 import { timerAtom, type TimerMode } from "@/store/timer";
 import { useAtom } from "jotai";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { type PomodoroSettings, settingsAtom } from "@/store/settings";
 
 /* type Props = {
@@ -31,15 +29,15 @@ import { type PomodoroSettings, settingsAtom } from "@/store/settings";
 		}
 	};
 
-	// 現在のモードに基づいた時間を取得
-	const duration = calculateDuration(timer.mode, settings);
+	// 現在のモードに基づいた総時間を取得 (秒単位)
+	const totalDurationSeconds = calculateDuration(timer.mode, settings);
 
 	// アニメーションを作成・更新する関数
-	const createOrUpdateAnimation = () => {
+	const createOrUpdateAnimation = useCallback(() => {
 		const element = divRef.current;
 		if (!element) return;
 
-		// 既存のアニメーションをクリア
+		// 既存のアニメーションをキャンセル（念のため）
 		if (animationRef.current) {
 			animationRef.current.cancel();
 		}
@@ -48,10 +46,20 @@ import { type PomodoroSettings, settingsAtom } from "@/store/settings";
 		const animation = element.animate(
 			[{ "--angle": "0deg" }, { "--angle": "360deg" }],
 			{
-				duration: Number(duration * 1000),
+				duration: totalDurationSeconds * 1000, // 総時間をミリ秒で設定
 				easing: "linear",
 			},
 		);
+
+		// タイマーが既に進行中の場合、アニメーションの開始位置を調整
+		if (timer.mode !== "ready" && timer.timeRemaining < totalDurationSeconds) {
+			const elapsedTimeMs = (totalDurationSeconds - timer.timeRemaining) * 1000;
+			animation.currentTime = elapsedTimeMs;
+			console.log(`ProgressCircle: Setting currentTime to ${elapsedTimeMs}ms`);
+		} else {
+			// ready モードや初回開始時は 0 から
+			animation.currentTime = 0;
+		}
 
 		// タイマーの状態に応じてアニメーションを制御
 		if (timer.isRunning) {
@@ -61,60 +69,56 @@ import { type PomodoroSettings, settingsAtom } from "@/store/settings";
 		}
 
 		animationRef.current = animation;
-	};
+	}, [totalDurationSeconds, timer.mode, timer.timeRemaining, timer.isRunning]);
 
 	// モードまたは設定が変わった時にアニメーションを更新
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		createOrUpdateAnimation();
-
-		return () => {
-			if (animationRef.current) {
-				animationRef.current.cancel();
-			}
-		};
-	}, [duration, timer.mode, settings]);
+	}, [createOrUpdateAnimation]);
 
 	// リセット時にイージングを付与する関数
-	const resetWithEasing = () => {
+	const resetWithEasing = useCallback(() => {
 		const element = divRef.current;
-		if (!element || !animationRef.current) return;
+		if (!element) return;
 
-		// 現在のアニメーションを一時停止
-		animationRef.current.pause();
+		// 既存のアニメーションがあればキャンセル
+		if (animationRef.current) {
+			animationRef.current.cancel();
+			animationRef.current = null;
+		}
 
-		// 現在の角度を取得
+		// 現在の角度（CSSから取得）
 		const computedStyle = getComputedStyle(element);
 		const currentAngle = computedStyle.getPropertyValue("--angle") || "0deg";
 
-		// 現在の角度から360degに戻るアニメーションを作成
-		const resetAnimation = element.animate(
-			[{ "--angle": currentAngle }, { "--angle": "0deg" }],
-			{
-				duration: 220,
-				easing: "ease-in-out",
-			},
-		);
+		// 現在の角度から 0deg に戻るアニメーションを作成
+		element.animate([{ "--angle": currentAngle }, { "--angle": "0deg" }], {
+			duration: 220,
+			easing: "ease-in-out",
+			fill: "forwards", // アニメーション終了後、最後の状態を保持
+		});
+	}, []);
 
-		// リセットアニメーション完了後に元のアニメーションをキャンセル
-		resetAnimation.onfinish = () => {
-			createOrUpdateAnimation();
-		};
-	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// isRunning または mode が変わった時のアニメーション制御
 	useEffect(() => {
-		if (!animationRef.current) return;
+		if (!animationRef.current) {
+			// アニメーションがない場合 (例: ready から開始)
+			if (timer.isRunning) {
+				createOrUpdateAnimation(); // 新しく作成して再生
+			}
+			return; // アニメーションがない場合は何もしない
+		}
 
 		if (timer.isRunning) {
 			animationRef.current.play();
 		} else if (timer.mode === "ready") {
-			// cancel()の代わりにイージング付きのリセットを呼び出す
+			// ready モードで、かつ isRunning が false になった場合
 			resetWithEasing();
 		} else {
+			// ready 以外で isRunning が false になった場合 (pause)
 			animationRef.current.pause();
 		}
-	}, [timer.isRunning, timer.mode]);
+	}, [timer.isRunning, timer.mode, createOrUpdateAnimation, resetWithEasing]);
 
 	return (
 		<div className="w-full h-max max-w-full  flex justify-center items-center relative">

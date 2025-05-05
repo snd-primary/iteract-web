@@ -3,14 +3,11 @@ import { Button } from "@/components/ui/button";
 import { PauseIcon } from "@radix-ui/react-icons";
 import { timerAtom } from "@/store/timer";
 import { useTimer } from "@/lib/hooks/useTimer";
-import { useTranslations } from "next-intl";
 
 export function Controls() {
 	const [timer] = useAtom(timerAtom);
 	const { startTimer, pauseTimer, resumeTimer, resetTimer, skipToNext } =
 		useTimer();
-
-	const t = useTranslations("controls");
 
 	// Start or resume the timer
 	const handleStartOrResume = () => {

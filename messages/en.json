@@ -55,5 +55,27 @@
 	"units": {
 		"min": "min",
 		"times": "times"
+	},
+	"Header": {
+		"title": "Iteract",
+		"nav": {
+			"home": "Home",
+			"about": "About",
+			"contact": "Contact"
+		}
+	},
+	"LocaleSwitcher": {
+		"label": "Change language",
+		"locale": "{locale, select, ja {Japanese} en {English} ko {Korean} other {Unknown}}"
+	},
+	"Metadata": {
+		"defaultTitle": "Iteract - Pomodoro Timer & Task Management",
+		"defaultDescription": "Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.",
+		"homeTitle": "Home | Iteract",
+		"homeDescription": "Start focusing now with the Iteract Pomodoro timer. Manage your tasks and track your progress effectively."
+	},
+	"Pomodoro": {
+		"timer": {
+		}
 	}
 }

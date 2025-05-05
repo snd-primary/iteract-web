@@ -13,7 +13,7 @@
 		"pomodoro": "뽀모도로"
 	},
 	"controls": {
-		"title": "조작",
+		"title": "컨트롤",
 		"start": "시작",
 		"resume": "재개",
 		"pause": "일시정지",
@@ -33,12 +33,12 @@
 		"autoStart": {
 			"title": "자동 시작",
 			"breaks": "휴식 자동 시작",
-			"work": "작업 자동 시작"
+			"work": "작업 세션 자동 시작"
 		},
 		"sound": {
 			"title": "알림 소리",
 			"test": "테스트",
-			"selectSound": "알림 소리 선택"
+			"selectSound": "알림음 선택"
 		},
 		"buttons": {
 			"save": "저장",
@@ -55,5 +55,23 @@
 	"units": {
 		"min": "분",
 		"times": "회"
+	},
+	"Header": {
+		"title": "Iteract",
+		"nav": {
+			"home": "홈",
+			"about": "소개",
+			"contact": "문의"
+		}
+	},
+	"LocaleSwitcher": {
+		"label": "언어 변경",
+		"locale": "{locale, select, ja {일본어} en {영어} ko {한국어} other {알 수 없음}}"
+	},
+	"Metadata": {
+		"defaultTitle": "Iteract - Pomodoro Timer & Task Management",
+		"defaultDescription": "Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.",
+		"homeTitle": "Home | Iteract",
+		"homeDescription": "Start focusing now with the Iteract Pomodoro timer. Manage your tasks and track your progress effectively."
 	}
 }
