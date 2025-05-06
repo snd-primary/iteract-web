@@ -22,6 +22,17 @@ export default function LocaleSwitcher() {
 		router.replace(pathname, { locale: newLocale });
 	};
 
+	const getLocaleTitle = (locale: "en" | "ja" | "ko") => {
+		switch (locale) {
+			case "en":
+				return "English";
+			case "ja":
+				return "日本語";
+			case "ko":
+				return "한국어";
+		}
+	};
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -37,7 +48,7 @@ export default function LocaleSwitcher() {
 						onClick={() => handleLocaleChange(cur)}
 						disabled={locale === cur}
 					>
-						{t("locale", { locale: cur })}
+						{getLocaleTitle(cur)}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>
