@@ -73,5 +73,18 @@
 		"defaultDescription": "Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.",
 		"homeTitle": "Home | Iteract",
 		"homeDescription": "Start focusing now with the Iteract Pomodoro timer. Manage your tasks and track your progress effectively."
+	},
+
+	"footer": {
+		"privacyPolicy": {
+			"title": "Privacy Policy",
+			"content": "이 웹사이트는 사용자 경험을 향상시키기 위해 쿠키와 Google Analytics를 사용합니다. \n이 사이트를 사용함으로써 쿠키 사용에 동의하는 것으로 간주됩니다.",
+			"lastUpdated": "최종 업데이트: {date}"
+		},
+		"feedback": {
+			"title": "Feedback",
+			"content": "서비스를 이용해 주셔서 감사합니다. \n피드백이나 문의사항은 X (구 트위터)의 다이렉트 메시지로 로 연락주시기 바랍니다.",
+			"twitterHandle": "@your_account_name"
+		}
 	}
 }

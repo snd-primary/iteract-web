@@ -1,10 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SpeakerLoudIcon, Cross1Icon } from "@radix-ui/react-icons";
+import {
+	SpeakerLoudIcon,
+	SpeakerOffIcon,
+	Cross1Icon,
+} from "@radix-ui/react-icons";
 import type { SoundType } from "@/store/settings";
 import { Checkbox } from "../ui/checkbox";
-import { Slider } from "../ui/slider";
+import { Slider } from "@/components/ui/slider";
 import {
 	Select,
 	SelectContent,
@@ -19,7 +23,7 @@ import { useSettings } from "@/lib/hooks/useSettings";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
-const soundTypes: SoundType[] = ["bell", "chime", "beep"];
+const soundTypes: SoundType[] = ["digital", "bell1", "bell2", "beep"];
 
 export function Settings() {
 	const t = useTranslations("settings");
@@ -47,7 +51,7 @@ export function Settings() {
 						transition={{ duration: 0.5 }}
 						key={"settings"}
 					>
-						<div className="bg-card  border border-border p-3 w-full max-w-md mx-auto h-fit max-h-fit grid grid-cols-1 gap-6">
+						<div className="bg-card  border border-border p-3 w-full max-w-md mx-auto h-fit max-h-fit grid grid-cols-1 gap-4">
 							{/* タイトルと閉じるボタン */}
 							<div className="flex justify-between items-center ">
 								<h2 className="text-xl font-semibold">{t("title")}</h2>
@@ -64,7 +68,7 @@ export function Settings() {
 							{/* セッティング項目 */}
 							<div className="grid grid-cols-1 gap-4">
 								<SettingBlock title={t("timer.title")}>
-									<div className="grid grid-cols-2 gap-y-8">
+									<div className="grid grid-cols-2 gap-y-4">
 										<InputTime
 											label={t("timer.work")}
 											id="workTime"
@@ -108,7 +112,7 @@ export function Settings() {
 
 								<SettingBlock title={t("autoStart.title")}>
 									<div className="space-y-2">
-										<div className="flex items-center">
+										<div className="flex items-center ">
 											<Checkbox
 												id="autoStartBreak"
 												name="autoStartBreak"
@@ -120,7 +124,7 @@ export function Settings() {
 												{t("autoStart.breaks")}
 											</label>
 										</div>
-										<div className="flex items-center">
+										<div className="flex items-center ">
 											<Checkbox
 												id="autoStartWork"
 												name="autoStartWork"
@@ -136,7 +140,7 @@ export function Settings() {
 								</SettingBlock>
 
 								<SettingBlock title={t("sound.title")}>
-									<div className="w-full h-full items-center flex justify-start gap-8">
+									<div className="flex items-center gap-4">
 										<Select
 											value={tempSettings.soundType}
 											onValueChange={(value: SoundType) => {
@@ -159,7 +163,6 @@ export function Settings() {
 												</SelectGroup>
 											</SelectContent>
 										</Select>
-
 										{/* テスト再生ボタン */}
 										<Button
 											variant="outline"
@@ -182,21 +185,29 @@ export function Settings() {
 											{t("sound.test")}
 										</Button>
 									</div>
-									<div className="flex items-center gap-2 pl-2">
-										<SpeakerLoudIcon width={16} />
+
+									{/* 音量スライダー */}
+									<div className="flex items-center gap-2">
+										{tempSettings.soundVolume <= 0 ? (
+											<SpeakerOffIcon width={16} />
+										) : (
+											<SpeakerLoudIcon width={16} />
+										)}
 										<Slider
-											id="soundVolume"
-											defaultValue={[tempSettings.soundVolume]}
-											min={0}
-											max={100}
-											step={1}
-											onValueChange={(values) => {
+											value={[tempSettings.soundVolume]}
+											onValueChange={(value: number[]) => {
 												setTempSettings({
 													...tempSettings,
-													soundVolume: values[0],
+													soundVolume: value[0],
 												});
 											}}
+											max={100}
+											step={10}
+											className="w-[180px]"
 										/>
+										<span className="text-sm w-8 text-right">
+											{tempSettings.soundVolume}%
+										</span>
 									</div>
 								</SettingBlock>
 							</div>

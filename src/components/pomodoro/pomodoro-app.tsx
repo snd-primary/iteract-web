@@ -13,9 +13,9 @@ export const PomodoroApp = () => {
 	usePersistState();
 
 	return (
-		<main className="max-w-full w-full h-fit grid grid-cols-1 grid-rows-[1fr_70px] gap-12 items-center justify-center bg-background text-foreground px-4 relative">
+		<main className="max-w-full w-full h-fit grid grid-cols-1 grid-rows-[1fr_70px] gap-6 items-center justify-center bg-background text-foreground px-4 relative">
 			<Settings />
-			<div className="w-full grid grid-cols-1 gap-16 justify-center justify-self-center md:border-1 md:p-8 relative">
+			<div className="w-full grid grid-cols-1 gap-16 md:gap-8 justify-center justify-self-center sm:border-1 sm:p-6 rounded-sm relative">
 				<Timer />
 				<Controls />
 			</div>

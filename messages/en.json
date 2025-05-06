@@ -75,7 +75,18 @@
 		"homeDescription": "Start focusing now with the Iteract Pomodoro timer. Manage your tasks and track your progress effectively."
 	},
 	"Pomodoro": {
-		"timer": {
+		"timer": {}
+	},
+	"footer": {
+		"privacyPolicy": {
+			"title": "Privacy Policy",
+			"content": "This website uses cookies and Google Analytics to improve user experience. By using this site, you consent to the use of cookies.",
+			"lastUpdated": "Last Updated: {date}"
+		},
+		"feedback": {
+			"title": "Feedback",
+			"content": "Thank you for using our service. For feedback or inquiries, please contact us via direct message on X (formerly Twitter) at .",
+			"twitterHandle": "@your_account_name"
 		}
 	}
 }

@@ -11,14 +11,16 @@ export function useNotificationSound() {
 
 	const getSoundPath = (soundType: SoundType): string => {
 		switch (soundType) {
+			case "digital":
+				return "/sound/digital.mp3";
+			case "bell1":
+				return "/sound/bell1.mp3";
+			case "bell2":
+				return "/sound/bell2.mp3";
 			case "beep":
-				return "/sound/emergency-siren-alert.mp3";
-			case "bell":
-				return "/sound/retro-alarm-clock.mp3";
-			case "chime":
-				return "/sound/bing-bong-subway.mp3";
+				return "/sound/beep.mp3";
 			default:
-				return "/sound/emergency-siren-alert.mp3";
+				return "/sound/digital.mp3";
 		}
 	};
 

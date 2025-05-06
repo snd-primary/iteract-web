@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 
 // サウンドタイプを定義
-export type SoundType = "bell" | "chime" | "beep";
+export type SoundType = "digital" | "bell1" | "bell2" | "beep";
 
 // Settings interface
 export interface PomodoroSettings {
@@ -23,7 +23,7 @@ export const defaultSettings: PomodoroSettings = {
 	longBreakInterval: 4,
 	autoStartBreak: false,
 	autoStartWork: false,
-	soundVolume: 80,
+	soundVolume: 30,
 	soundType: "beep",
 };
 

@@ -11,6 +11,7 @@ import { routing } from "@/i18n/routing";
 
 import { ThemeProvider } from "next-themes";
 import { GlobalHooks } from "@/components/global-hooks";
+import { Footer } from "@/components/footer";
 
 const dotGothic16 = DotGothic16({
 	variable: "--font-dot-gothic-16",
@@ -94,11 +95,12 @@ export default async function RootLayout({
 				>
 					<NextIntlClientProvider locale={locale}>
 						<GlobalHooks />
-						<div className="max-w-7xl h-lvh mx-auto lg:border-r lg:border-l grid grid-cols-1 items-start">
+						<div className="max-w-7xl h-lvh mx-auto  grid grid-cols-1 items-start">
 							<Header />
-							<div className="w-full h-fit grid grid-cols-[minmax(320px,450px)] place-content-center place-items-center">
+							<div className="w-full h-fit grid grid-cols-[minmax(280px,450px)] place-content-center place-items-center">
 								{children}
 							</div>
+							<Footer />
 						</div>
 					</NextIntlClientProvider>
 				</ThemeProvider>
