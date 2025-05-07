@@ -51,6 +51,14 @@ export const metadata: Metadata = {
 		{ media: "(prefers-color-scheme: light)", color: "white" },
 		{ media: "(prefers-color-scheme: dark)", color: "black" },
 	],
+	icons: {
+		icon: [
+			{ url: "/favicon.ico", type: "image/x-icon", sizes: "any" },
+			{ url: "/icon/icon.svg", type: "svg+xml" },
+		],
+		apple: [{ url: "/icon/apple-touch-icon.png", sizes: "152x152" }],
+	},
+	manifest: "/manifest.json",
 };
 
 export default async function RootLayout({
