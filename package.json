@@ -14,17 +14,15 @@
 		"test": "vitest run",
 		"test:browser": "vitest run --browser",
 		"test:watch": "vitest --browser",
-		"test:coverage": "vitest run --coverage --browser",
-		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-		"upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+		"test:coverage": "vitest run --coverage --browser"
 	},
 	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx}": ["biome format --write", "biome lint --apply"]
+		"**/*.{js,jsx,ts,tsx}": [
+			"biome format --write",
+			"biome lint --apply"
+		]
 	},
 	"dependencies": {
-		"@opennextjs/cloudflare": "^1.0.1",
 		"@radix-ui/react-checkbox": "^1.2.3",
 		"@radix-ui/react-dialog": "^1.1.12",
 		"@radix-ui/react-dropdown-menu": "^2.1.12",
@@ -46,7 +44,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/react": "^16.3.0",
@@ -56,13 +53,10 @@
 		"@vitejs/plugin-react": "^4.4.1",
 		"@vitest/browser": "^3.1.2",
 		"chromedriver": "^135.0.2",
-		"eslint": "^9",
-		"eslint-config-next": "15.3.1",
 		"husky": "^9.1.7",
 		"jsdom": "^26.1.0",
 		"lint-staged": "^15.5.1",
 		"tailwindcss": "^4",
-		"typescript": "^5",
-		"vitest": "^3.1.2"
+		"typescript": "^5"
 	}
 }
