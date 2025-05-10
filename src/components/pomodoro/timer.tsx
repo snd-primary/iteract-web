@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { timerAtom } from "@/store/timer";
 import { settingsAtom } from "@/store/settings";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
@@ -129,6 +129,17 @@ export function Timer() {
 	};
 	const currentBgColor = modeBackgroundColor[timer.mode];
 
+	// CSR専用にするためのステート
+	const [displayedTime, setDisplayedTime] = useState("00:00"); // 初期値はプレースホルダー
+
+	useEffect(() => {
+		const timeValue =
+			timer.mode === "ready"
+				? formatTime(modereadyTimer())
+				: formatTime(timer.timeRemaining);
+		setDisplayedTime(timeValue);
+	}, [timer.mode, timer.timeRemaining, modereadyTimer, formatTime]); // 依存配列に注意
+
 	return (
 		<div className="w-full h-min grid grid-cols-1 grid-rows-[70px_1fr_auto] gap-2 text-center justify-items-center  items-start relative select-none">
 			<div className="grid grid-cols-1 items-start justify-center justify-items-center gap-2 ">
@@ -157,11 +168,14 @@ export function Timer() {
 			</div>
 
 			<div className="w-full grid gap-2 grid-rows-[1fr_20px] text-foreground/90 border-l-1 border-r-1">
-				<div className="self-center w-full h-full text-7xl font-departure mb-0 font-bold ">
-					{timer.mode === "ready"
-						? formatTime(modereadyTimer())
-						: formatTime(timer.timeRemaining)}
-				</div>
+				<motion.div
+					className="self-center w-full h-full text-7xl font-departure mb-0 font-bold "
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.5 }}
+				>
+					{displayedTime}
+				</motion.div>
 				<p className="font-departure mx-auto w-50 h-full text-sm text-muted-foreground ">
 					{`settion #${timer.completedPomodoros + (timer.mode === "focus" ? 1 : 0)}`}
 				</p>
