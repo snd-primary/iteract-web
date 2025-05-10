@@ -1,3 +1,4 @@
+"use client";
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";
 import { PauseIcon } from "@radix-ui/react-icons";

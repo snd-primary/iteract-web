@@ -34,9 +34,9 @@ export function Settings() {
 		handleCheckboxChange,
 		handleChange,
 		settingsOpen,
+		getSoundPath,
 		tempSettings,
 		setTempSettings,
-		getSoundPath,
 	} = useSettings();
 
 	return (
@@ -144,10 +144,10 @@ export function Settings() {
 										<Select
 											value={tempSettings.soundType}
 											onValueChange={(value: SoundType) => {
-												setTempSettings({
-													...tempSettings,
+												setTempSettings((prevTempSettings) => ({
+													...prevTempSettings,
 													soundType: value,
-												});
+												}));
 											}}
 										>
 											<SelectTrigger className="w-[180px]">
@@ -196,10 +196,10 @@ export function Settings() {
 										<Slider
 											value={[tempSettings.soundVolume]}
 											onValueChange={(value: number[]) => {
-												setTempSettings({
-													...tempSettings,
+												setTempSettings((prevTempSettings) => ({
+													...prevTempSettings,
 													soundVolume: value[0],
-												});
+												}));
 											}}
 											max={100}
 											step={10}

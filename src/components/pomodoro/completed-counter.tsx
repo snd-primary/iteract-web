@@ -1,3 +1,4 @@
+"use client";
 import { useAtom } from "jotai";
 import { todayCompletedCountAtom } from "@/store/records";
 import { useTranslations } from "next-intl";

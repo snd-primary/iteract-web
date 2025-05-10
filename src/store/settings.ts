@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { atomWithStorage, createJSONStorage } from "jotai/utils";
 
 // サウンドタイプを定義
 export type SoundType = "digital" | "bell1" | "bell2" | "beep";
@@ -15,19 +16,37 @@ export interface PomodoroSettings {
 	soundType: SoundType;
 }
 
-// Default settings
-export const defaultSettings: PomodoroSettings = {
+const storage = createJSONStorage<PomodoroSettings>(() => {
+	if (typeof window !== "undefined") {
+		return localStorage;
+	}
+
+	return {
+		getItem: () => null,
+		setItem: () => {},
+		removeItem: () => {},
+	};
+});
+
+// これが settingsAtom の初期値となる「ただのJavaScriptオブジェクト」です
+const initialSettingsData: PomodoroSettings = {
 	workTime: 25,
 	shortBreakTime: 5,
 	longBreakTime: 15,
 	longBreakInterval: 4,
 	autoStartBreak: false,
 	autoStartWork: false,
-	soundVolume: 30,
+	soundVolume: 50,
 	soundType: "beep",
 };
 
-export const settingsOpenAtom = atom(false); // Settings open state atom
+// Settings atom を atomWithStorage で直接定義します。
+// これが localStorage と同期する設定情報のための atom 本体です。
+export const settingsAtom = atomWithStorage<PomodoroSettings>(
+	"pomodoro-settings", // 1. localStorage のキー名
+	initialSettingsData, // 2. 初期値 (上記のオブジェクトを指定)
+	storage, // 3. ストレージ設定
+	{ getOnInit: true }, // 4. 初期値を取得するかどうか
+);
 
-// Settings atom
-export const settingsAtom = atom<PomodoroSettings>(defaultSettings);
+export const settingsOpenAtom = atom(false); // Settings Modal open state atom

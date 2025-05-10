@@ -163,11 +163,11 @@ export function Timer() {
 						: formatTime(timer.timeRemaining)}
 				</div>
 				<p className="font-departure mx-auto w-50 h-full text-sm text-muted-foreground ">
-					{`session #${timer.completedPomodoros + (timer.mode === "focus" ? 1 : 0)}`}
+					{`settion #${timer.completedPomodoros + (timer.mode === "focus" ? 1 : 0)}`}
 				</p>
 			</div>
 			<div className="w-full h-auto px-12 pt-4">
-				{/* Progress Bar Table */}
+				{/* Progress Bar TableUI */}
 				<table className="w-full h-8 border-collapse">
 					<tbody>
 						<tr>
@@ -183,7 +183,9 @@ export function Timer() {
 											mode: timer.mode,
 											borderStyle: "solid",
 											borderWidth: "thin",
-										})} ${isFilled ? currentBgColor : ""} transition-colors duration-300 ease-in-out`}
+										})} ${
+											isFilled ? currentBgColor : ""
+										} transition-colors duration-300 ease-in-out`}
 									/>
 								);
 							})}

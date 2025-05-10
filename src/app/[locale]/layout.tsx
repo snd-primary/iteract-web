@@ -10,7 +10,6 @@ import { routing } from "@/i18n/routing";
 // import { getTranslations } from "next-intl/server";
 
 import { ThemeProvider } from "next-themes";
-import { GlobalHooks } from "@/components/global-hooks";
 import { Footer } from "@/components/footer";
 
 const dotGothic16 = DotGothic16({
@@ -101,7 +100,6 @@ export default async function RootLayout({
 					disableTransitionOnChange // Recommended to disable theme transition during navigation
 				>
 					<NextIntlClientProvider locale={locale}>
-						<GlobalHooks />
 						<div className="max-w-7xl h-lvh mx-auto  grid grid-cols-1 items-start">
 							<Header />
 							<div className="w-full h-fit grid grid-cols-[minmax(280px,450px)] place-content-center place-items-center">
