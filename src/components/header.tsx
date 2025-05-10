@@ -16,7 +16,7 @@ const Header = () => {
 					<GearIcon className="h-5 w-5" />
 					<span className="sr-only">Settings</span>
 				</Button>
-				<div className="flex items-center gap-2 select-none pl-18 pt-4">
+				<div className="flex items-center gap-2 select-none pl-18 pt-4 xs:hidden">
 					<span className="text-lg">Iteract</span>
 					<svg
 						width="24"
