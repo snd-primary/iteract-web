@@ -92,7 +92,7 @@ export default async function RootLayout({
 			suppressHydrationWarning // Required when using next-themes
 			className={`${departureMono.variable} ${dotGothic16.variable} ${orbit.variable}`}
 		>
-			<body className={`${fontFamilyClass()} antialiased  `}>
+			<body className={`${fontFamilyClass()} antialiased`}>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
@@ -100,9 +100,9 @@ export default async function RootLayout({
 					disableTransitionOnChange // Recommended to disable theme transition during navigation
 				>
 					<NextIntlClientProvider locale={locale}>
-						<div className="max-w-7xl h-lvh mx-auto  grid grid-cols-1 items-start">
+						<div className="max-w-7xl h-lvh mx-auto grid grid-cols-1 items-start border-r-1 border-l-1 gap-8 sm:gap-0">
 							<Header />
-							<div className="w-full h-fit grid grid-cols-[minmax(280px,450px)] place-content-center place-items-center">
+							<div className="w-full h-fit grid grid-cols-[minmax(280px,450px)] place-content-center place-items-center self-center ">
 								{children}
 							</div>
 							<Footer />

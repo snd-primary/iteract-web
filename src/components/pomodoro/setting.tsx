@@ -104,7 +104,6 @@ export function Settings() {
 											max="10"
 											value={tempSettings.longBreakInterval}
 											onChange={handleChange}
-											annotation="Number of work sessions before a long break"
 											isMinutes={false}
 										/>
 									</div>

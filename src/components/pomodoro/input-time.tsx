@@ -1,6 +1,7 @@
 "use client";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 type Props = {
 	label: string;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export const InputTime: React.FC<Props> = ({ isMinutes = true, ...props }) => {
+	const t = useTranslations("settings.unit");
 	return (
 		<div className={cn("", props.className)}>
 			<label htmlFor={props.name} className="text-sm pl-1">
@@ -32,7 +34,11 @@ export const InputTime: React.FC<Props> = ({ isMinutes = true, ...props }) => {
 					onChange={props.onChange}
 					className="max-w-16 border border-input outline py-2 text-sm"
 				/>
-				{isMinutes ? <span>min</span> : <span>times</span>}
+				{isMinutes ? (
+					<span>{t("unitMinutes")}</span>
+				) : (
+					<span>{t("unitCount")}</span>
+				)}
 			</div>
 			{props.annotation && (
 				<p className="text-xs text-muted-foreground mt-1 pl-1">

@@ -9,9 +9,9 @@ export function CompletedCounter() {
 	const t = useTranslations("stats");
 
 	return (
-		<div className="flex flex-col items-center justify-center select-none">
+		<div className="flex items-center justify-center select-none gap-4">
 			<p className="text-sm text-muted-foreground">{t("todayCompleted")}</p>
-			<p className="text-3xl font-bold">{completedCount}</p>
+			<p className="text-xl">{completedCount}</p>
 		</div>
 	);
 }

@@ -30,6 +30,10 @@
 			"longBreakInterval": "긴 휴식 간격",
 			"intervalNote": "긴 휴식 전 작업 세션 수"
 		},
+		"unit": {
+			"unitMinutes": "분",
+			"unitCount": "회"
+		},
 		"autoStart": {
 			"title": "자동 시작",
 			"breaks": "휴식 자동 시작",
@@ -77,14 +81,13 @@
 
 	"footer": {
 		"privacyPolicy": {
-			"title": "Privacy Policy",
-			"content": "이 웹사이트는 사용자 경험을 향상시키기 위해 쿠키와 Google Analytics를 사용합니다. \n이 사이트를 사용함으로써 쿠키 사용에 동의하는 것으로 간주됩니다.",
+			"title": "개인정보처리방침",
+			"content": "본 웹사이트에서는 사용자 경험 향상을 위해 Google Analytics를 사용하고 있습니다.\n 자세한 내용은 <link>Google 서비스를 사용하는 사이트 또는 앱에서 수집한 정보의 Google 사용 방식</link>을 참조하십시오.",
 			"lastUpdated": "최종 업데이트: {date}"
 		},
 		"feedback": {
-			"title": "Feedback",
-			"content": "서비스를 이용해 주셔서 감사합니다. \n피드백이나 문의사항은 X (구 트위터)의 다이렉트 메시지로 로 연락주시기 바랍니다.",
-			"twitterHandle": "@your_account_name"
+			"title": "피드백",
+			"content": "서비스를 이용해 주셔서 감사합니다.\n 피드백이나 문의사항은 X (구 Twitter) 다이렉트 메시지로 연락 주시기 바랍니다.\n 버그 신고나 기능 요청 등 어떤 것이든 환영합니다."
 		}
 	}
 }

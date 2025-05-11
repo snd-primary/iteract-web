@@ -26,7 +26,7 @@ export function Controls() {
 	};
 
 	return (
-		<div className="grid place-items-center gap-4">
+		<div className="grid place-items-center gap-6">
 			<div className="w-full text-center text-xs relative tracking-[6px] font-departure opacity-30 before:w-full before:h-full  before:absolute before:top-2 before:left-0 before:-z-10 before:border-t-1 before:border-l-1 before:border-r-1 before:border-foreground/50 select-none">
 				<span className="inline-block bg-background pl-1">controls</span>
 			</div>

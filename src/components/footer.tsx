@@ -1,5 +1,11 @@
 "use client";
 
+import { Button } from "./ui/button";
+import { GearIcon } from "@radix-ui/react-icons";
+import { useSettings } from "@/lib/hooks/useSettings";
+
+import LocaleSwitcher from "./locale-switcher";
+
 import {
 	Dialog,
 	DialogContent,
@@ -17,14 +23,14 @@ export const Footer = () => {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className="w-full h-auto bg-background grid grid-cols-1 items-center justify-center text-center gap-4">
+		<footer className="w-full h-auto bg-background grid grid-cols-1 items-center justify-center text-center gap-4 self-end pb-4">
 			<div className="flex justify-center items-center gap-4">
 				{keys.map((key) => (
 					<Dialog key={key}>
 						<DialogTrigger asChild>
 							<button
 								type="button"
-								className="text-xs text-foreground opacity-50 hover:opacity-90 pointer-events-auto cursor-pointer ease-in-out transition-all duration-200"
+								className="text-xs text-muted-foreground opacity-50 hover:opacity-90 pointer-events-auto cursor-pointer ease-in-out transition-all duration-200"
 							>
 								{t(`${key}.title`)}
 							</button>
@@ -35,7 +41,18 @@ export const Footer = () => {
 								<DialogTitle>{t(`${key}.title`)}</DialogTitle>
 							</DialogHeader>
 							<DialogDescription className="whitespace-pre-line leading-6">
-								{t(`${key}.content`)}
+								{t.rich(`${key}.content`, {
+									link: (chunks) => (
+										<a
+											href="https://policies.google.com/technologies/partner-sites"
+											rel="noreferrer noopener"
+											target="_blank"
+											className="text-blue-500 hover:text-blue-600 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+										>
+											{chunks}
+										</a>
+									),
+								})}
 							</DialogDescription>
 							{key === "feedback" && (
 								<div className="overflow-hidden flex items-center gap-4 pt-8 ">
@@ -72,9 +89,12 @@ export const Footer = () => {
 					</Dialog>
 				))}
 			</div>
-			<p className="text-xs text-foreground opacity-50 select-none">
+			<p className="text-xs text-muted-foreground opacity-50 select-none">
 				© {currentYear} trhr-core
 			</p>
+			<div className="flex items-center justify-center">
+				<LocaleSwitcher />
+			</div>
 		</footer>
 	);
 };

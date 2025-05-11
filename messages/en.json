@@ -30,6 +30,10 @@
 			"longBreakInterval": "Long Break Interval",
 			"intervalNote": "Number of work sessions before a long break"
 		},
+		"unit": {
+			"unitMinutes": "min",
+			"unitCount": "times"
+		},
 		"autoStart": {
 			"title": "Auto Start",
 			"breaks": "Auto-start breaks",
@@ -80,13 +84,12 @@
 	"footer": {
 		"privacyPolicy": {
 			"title": "Privacy Policy",
-			"content": "This website uses cookies and Google Analytics to improve user experience. By using this site, you consent to the use of cookies.",
+			"content": "This website uses Google Analytics to improve user experience.\n For more details, please see <link>How Google uses information from sites or apps that use our services</link>.",
 			"lastUpdated": "Last Updated: {date}"
 		},
 		"feedback": {
 			"title": "Feedback",
-			"content": "Thank you for using our service. For feedback or inquiries, please contact us via direct message on X (formerly Twitter) at .",
-			"twitterHandle": "@your_account_name"
+			"content": "Thank you for using our service.\n For feedback and inquiries, please contact us via direct message on X (formerly Twitter).\n We welcome any bug reports, feature requests, etc."
 		}
 	}
 }
