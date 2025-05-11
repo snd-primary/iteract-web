@@ -1,14 +1,14 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
-  "name": "iteract-web",
-  "compatibility_date": "2025-05-07",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-  "r2_buckets": [
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "iteract-web",
+	"compatibility_date": "2025-05-07",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	}
+	/*   "r2_buckets": [
     // Use R2 incremental cache
     // See https://opennext.js.org/cloudflare/caching
     {
@@ -17,5 +17,5 @@
       // See https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-create
       "bucket_name": "<BUCKET_NAME>"
     }
-  ]
+  ] */
 }
