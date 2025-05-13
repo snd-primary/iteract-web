@@ -6,8 +6,6 @@ import Header from "@/components/header";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-// Import getTranslations for potential use in layout metadata (though static export is preferred)
-// import { getTranslations } from "next-intl/server";
 
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/footer";
@@ -39,21 +37,31 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
 	metadataBase: new URL(BASE_URL),
 	title: {
-		default: "Iteract - Pomodoro Timer & Task Management", // Default title (can be translated if layout becomes async)
+		default: "Iteract - Pomodoro Timer & Task Management", // Default title
 		template: "%s | Iteract", // Template for page titles
 	},
 	description:
-		"Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.", // Default description (can be translated)
+		"Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.",
 	colorScheme: "light dark", // lightとdarkの両方をサポートすることを示す
-	viewport: "width=device-width, initial-scale=1",
+	manifest: "/manifest.json", // Web Manifestへのパス
+	viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 	themeColor: [
-		{ media: "(prefers-color-scheme: light)", color: "white" },
-		{ media: "(prefers-color-scheme: dark)", color: "black" },
+		{ media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+		{ media: "(prefers-color-scheme: dark)", color: "#000000" },
 	],
+	appleWebApp: {
+		capable: true,
+		statusBarStyle: "default",
+		title: "Iteract",
+	},
+	applicationName: "Iteract",
+	formatDetection: {
+		telephone: false,
+	},
 	icons: {
 		icon: [
-			{ url: "/favicon.ico", type: "image/x-icon", sizes: "any" },
-			{ url: "/icon/icon.svg", type: "svg+xml" },
+			{ url: "/icon/icon-192x192.png", sizes: "192x192", type: "image/png" },
+			{ url: "/icon/icon-512x512.png", sizes: "512x512", type: "image/png" },
 		],
 		apple: [{ url: "/icon/apple-touch-icon.png", sizes: "152x152" }],
 	},
@@ -70,10 +78,6 @@ export default async function RootLayout({
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
-
-	// Fetch translations if needed for layout (e.g., for translated default title/description)
-	// const t = await getTranslations({ locale, namespace: 'Metadata' });
-	// If fetching translations, update metadata object accordingly here or make it dynamic
 
 	const fontFamilyClass = () => {
 		switch (locale) {
@@ -92,6 +96,12 @@ export default async function RootLayout({
 			suppressHydrationWarning // Required when using next-themes
 			className={`${departureMono.variable} ${dotGothic16.variable} ${orbit.variable}`}
 		>
+			<head>
+				{/* iOS用のフルスクリーン対応用メタタグを追加 */}
+				<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+				<link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+			</head>
 			<body className={`${fontFamilyClass()} antialiased`}>
 				<ThemeProvider
 					attribute="class"
