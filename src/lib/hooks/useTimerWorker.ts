@@ -54,12 +54,10 @@ export const useTimerWorker = ({
 		if (needsInitialization) {
 			setWorkerState((prev) => ({ ...prev, status: "initializing" }));
 			try {
-				console.log("Initializing new timer worker...");
 				currentWorker = new Worker(
 					new URL("../../workers/timerWorker.ts", import.meta.url),
 				);
 				setWorkerState({ worker: currentWorker, status: "ready" });
-				console.log("Worker initialized and stored in atom.");
 			} catch (error) {
 				console.error("Failed to initialize Web Worker", error);
 				setWorkerState({ worker: null, status: "error" });

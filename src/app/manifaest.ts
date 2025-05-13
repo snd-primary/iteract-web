@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
 	return {
-		name: "Iteract - Pomodoro Timer",
+		name: "Iteract PWA",
 		short_name: "Iteract",
 		description:
 			"Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.",

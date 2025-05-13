@@ -1,6 +1,20 @@
 import type { NextConfig } from "next";
 import createNextIntPlugin from "next-intl/plugin";
 
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+if (process.env.NODE_ENV === "development") {
+	initOpenNextCloudflareForDev();
+}
+
+// --- PWA Configuration ---
+
+const withPWA = require("next-pwa")({
+	dest: "public",
+	register: true,
+	skipWaiting: true,
+	disable: process.env.NODE_ENV === "development", // 開発中はPWAを無効化するのが一般的
+});
+
 const nextConfig: NextConfig = {
 	experimental: {
 		viewTransition: true,
@@ -23,7 +37,8 @@ const nextConfig: NextConfig = {
 
 const withNextIntl = createNextIntPlugin();
 
-export default withNextIntl(nextConfig);
+// 1. nextConfigをnext-intlでラップ
+const configWithIntl = withNextIntl(nextConfig);
+const finalConfig = withPWA(configWithIntl);
 
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev();
+export default finalConfig;

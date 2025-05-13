@@ -1,7 +1,7 @@
 "use client";
 import { settingsAtom, type SoundType } from "@/store/settings";
 import { useAtom } from "jotai";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 // 音量を0.0～1.0の範囲に正規化し、不正な値の場合はデフォルト値を返すヘルパー関数
 const normalizeAndValidateVolume = (
@@ -29,7 +29,7 @@ export function useNotificationSound() {
 	// Create audio element ref
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 
-	const getSoundPath = (soundType: SoundType): string => {
+	const getSoundPath = useCallback((soundType: SoundType): string => {
 		switch (soundType) {
 			case "digital":
 				return "/sound/digital.mp3";
@@ -42,15 +42,16 @@ export function useNotificationSound() {
 			default:
 				return "/sound/digital.mp3";
 		}
-	};
+	}, []);
 
 	// Initialize audio on component mount
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		// Create audio element if it doesn't exist
 		if (!audioRef.current) {
-			audioRef.current = new Audio();
+			audioRef.current = new Audio(getSoundPath(settings.soundType));
 		}
+
+		audioRef.current = new Audio(getSoundPath(settings.soundType));
 
 		const audioElement = audioRef.current;
 
@@ -71,11 +72,12 @@ export function useNotificationSound() {
 				audioRef.current = null;
 			}
 		};
-	}, [settings.soundType, settings.soundVolume]);
+	}, [settings.soundType, settings.soundVolume, getSoundPath]);
 
 	// Function to play notification sound
 	const playSound = () => {
 		if (audioRef.current) {
+			audioRef.current = new Audio(getSoundPath(settings.soundType));
 			const audioElement = audioRef.current;
 
 			const currentVolumeSetting = settings.soundVolume;
