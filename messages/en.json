@@ -91,5 +91,18 @@
 			"title": "Feedback",
 			"content": "Thank you for using our service.\n For feedback and inquiries, please contact us via direct message on X (formerly Twitter).\n We welcome any bug reports, feature requests, etc."
 		}
+	},
+	"pwa": {
+		"installBanner": {
+			"title": "Install App",
+			"description": "Add to home screen for offline use",
+			"installButton": "Install",
+			"cancelButton": "Later"
+		},
+		"offline": {
+			"title": "You're Offline",
+			"description": "The app is running in offline mode due to no internet connection.\nTimer functionality is still available.",
+			"refreshButton": "Refresh"
+		}
 	}
 }
