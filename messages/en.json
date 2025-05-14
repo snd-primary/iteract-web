@@ -90,6 +90,10 @@
 		"feedback": {
 			"title": "Feedback",
 			"content": "Thank you for using our service.\n For feedback and inquiries, please contact us via direct message on X (formerly Twitter).\n We welcome any bug reports, feature requests, etc."
+		},
+		"appInfo": {
+			"title": "About iteract",
+			"content": "iteract is a simple and interactive timer app that utilizes the Pomodoro Technique.\nPlease use it as a tool to manage your work sessions and enhance your concentration."
 		}
 	}
 }

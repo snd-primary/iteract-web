@@ -19,7 +19,7 @@ import { useTranslations } from "next-intl";
 
 export const Footer = () => {
 	const t = useTranslations("footer");
-	const keys = ["privacyPolicy", "feedback"] as const;
+	const keys = ["privacyPolicy", "feedback", "appInfo"] as const;
 	const currentYear = new Date().getFullYear();
 
 	return (

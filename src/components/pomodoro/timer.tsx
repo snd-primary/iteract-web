@@ -169,7 +169,9 @@ export function Timer() {
 
 			<div className="w-full grid gap-2 grid-rows-[1fr_20px] text-foreground/90 border-l-1 border-r-1">
 				<motion.div
-					className="self-center w-full h-full text-7xl font-departure mb-0 font-bold "
+					className={`${statusText({
+						mode: timer.mode,
+					})} self-center w-full h-full text-7xl font-departure mb-0 font-bold border-none`}
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					transition={{ duration: 0.5 }}

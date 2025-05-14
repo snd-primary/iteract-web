@@ -56,9 +56,9 @@
 	--border: oklch(0.8 0 0);
 	--input: oklch(0.8 0 0);
 	--ring: oklch(0.608 0 0);
-	--state-focus: oklch(0.998 0.337 25.331);
-	--state-break-short: oklch(0.823 0.314 259.815);
-	--state-break-long: oklch(0.623 0.29 149.579);
+	--state-focus: oklch(0.69 0.14 57.79);
+	--state-break-short: oklch(0.66 0.22 144.95);
+	--state-break-long: oklch(0.71 0.13 211.81);
 	--state-ready: var(--color-foreground);
 }
 
@@ -81,9 +81,9 @@
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
 	--ring: oklch(0.556 0 0);
-	--state-focus: oklch(0.998 0.137 25.331);
-	--state-break-short: oklch(0.923 0.214 259.815);
-	--state-break-long: oklch(0.923 0.19 149.579);
+	--state-focus: oklch(0.92 0.19 105.06);
+	--state-break-short: oklch(0.84 0.28 148.86);
+	--state-break-long: oklch(0.81 0.15 211.76);
 	--state-ready: var(--color-foreground);
 }
 

@@ -44,14 +44,14 @@ export function Settings() {
 			{settingsOpen && (
 				<AnimatePresence>
 					<motion.div
-						className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center"
+						className="fixed inset-0 bg-background/10 backdrop-blur-sm z-50 flex items-center justify-center h-full"
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						transition={{ duration: 0.5 }}
 						key={"settings"}
 					>
-						<div className="bg-card  border border-border p-3 w-full max-w-md mx-auto h-fit max-h-fit grid grid-cols-1 gap-4">
+						<div className="bg-card/90  border border-border p-3 w-full max-w-md mx-auto h-fit max-h-fit grid grid-cols-1 gap-4 h-full ">
 							{/* タイトルと閉じるボタン */}
 							<div className="flex justify-between items-center ">
 								<h2 className="text-xl font-semibold">{t("title")}</h2>
@@ -66,7 +66,7 @@ export function Settings() {
 								</Button>
 							</div>
 							{/* セッティング項目 */}
-							<div className="grid grid-cols-1 gap-4">
+							<div className="grid grid-cols-1 gap-4 overflow-y-auto overscroll-contain">
 								<SettingBlock title={t("timer.title")}>
 									<div className="grid grid-cols-2 gap-y-4">
 										<InputTime
