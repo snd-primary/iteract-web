@@ -9,7 +9,21 @@ import { useTranslations } from "next-intl";
 
 import { cva } from "class-variance-authority";
 
-const statusText = cva("", {
+export const statusBg = cva("", {
+	variants: {
+		mode: {
+			focus: "bg-state-focus/3",
+			shortBreak: "bg-state-break-short/3",
+			longBreak: "bg-state-break-long/3",
+			ready: "bg-background",
+		},
+	},
+	defaultVariants: {
+		mode: "ready",
+	},
+});
+
+export const statusText = cva("", {
 	variants: {
 		mode: {
 			focus: "text-state-focus text-shadow-state-focus border-state-focus/90",
