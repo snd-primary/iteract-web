@@ -97,7 +97,7 @@ export function Timer() {
 
 	// Set page title with current timer state
 	useEffect(() => {
-		let title = "Pomodoro Timer";
+		let title = "Iteract Pomodoro Timer";
 
 		if (timer.mode !== "ready") {
 			title = `${formatTime(timer.timeRemaining)} - mode: ${modeText()}`;
@@ -188,7 +188,7 @@ export function Timer() {
 					})} self-center w-full h-full text-7xl font-departure mb-0 font-bold border-none`}
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
-					transition={{ duration: 0.5 }}
+					transition={{ duration: 0.1 }}
 				>
 					{displayedTime}
 				</motion.div>
