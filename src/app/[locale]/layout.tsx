@@ -11,6 +11,7 @@ import { routing } from "@/i18n/routing";
 
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/footer";
+import { PWALoader } from "@/components/pwa-loader";
 
 const dotGothic16 = DotGothic16({
 	variable: "--font-dot-gothic-16",
@@ -107,6 +108,7 @@ export default async function RootLayout({
 							</div>
 							<Footer />
 						</div>
+						<PWALoader />
 					</NextIntlClientProvider>
 				</ThemeProvider>
 			</body>
