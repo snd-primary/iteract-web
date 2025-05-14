@@ -6,15 +6,6 @@ if (process.env.NODE_ENV === "development") {
 	initOpenNextCloudflareForDev();
 }
 
-// --- PWA Configuration ---
-
-const withPWA = require("next-pwa")({
-	dest: "public",
-	register: true,
-	skipWaiting: true,
-	disable: process.env.NODE_ENV === "development", // 開発中はPWAを無効化するのが一般的
-});
-
 const nextConfig: NextConfig = {
 	experimental: {
 		viewTransition: true,
@@ -39,6 +30,6 @@ const withNextIntl = createNextIntPlugin();
 
 // 1. nextConfigをnext-intlでラップ
 const configWithIntl = withNextIntl(nextConfig);
-const finalConfig = withPWA(configWithIntl);
+const finalConfig = configWithIntl;
 
 export default finalConfig;
