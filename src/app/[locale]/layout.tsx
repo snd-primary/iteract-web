@@ -40,11 +40,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
 	metadataBase: new URL(BASE_URL),
 	title: {
-		default: "Iteract - Pomodoro Timer & Task Management", // Default title (can be translated if layout becomes async)
-		template: "%s | Iteract", // Template for page titles
+		default: "シンプルなポモドーロタイマー | Iteract（イテラクト）",
+		template: "%s | Iteract",
 	},
 	description:
-		"Boost your productivity with Iteract, a simple and interactive Pomodoro timer and task management app.", // Default description (can be translated)
+		"Iteract（イテラクト）は、シンプルで使いやすいポモドーロタイマーアプリです。集中力を高め、生産性を向上させるためのツールとして最適です。",
 	colorScheme: "light dark", // lightとdarkの両方をサポートすることを示す
 	viewport: "width=device-width, initial-scale=1",
 	themeColor: [

@@ -4,8 +4,6 @@ import { Settings } from "./setting";
 import { Controls } from "./controls";
 import { CompletedCounter } from "./completed-counter";
 import { Timer } from "./timer";
-import { useAtom } from "jotai";
-import { timerAtom } from "@/store/timer";
 
 export const PomodoroApp = () => {
 	return (
