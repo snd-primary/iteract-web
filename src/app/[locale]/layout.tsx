@@ -47,6 +47,14 @@ export const metadata: Metadata = {
 		"Iteract（イテラクト）は、シンプルで使いやすいポモドーロタイマーアプリです。集中力を高め、生産性を向上させるためのツールとして最適です。",
 	colorScheme: "light dark", // lightとdarkの両方をサポートすることを示す
 	viewport: "width=device-width, initial-scale=1",
+	alternates: {
+		canonical: "/",
+		languages: {
+			"en-US": "/en",
+			"ja-JP": "/ja",
+			"ko-KR": "/ko",
+		},
+	},
 	themeColor: [
 		{ media: "(prefers-color-scheme: light)", color: "white" },
 		{ media: "(prefers-color-scheme: dark)", color: "black" },
