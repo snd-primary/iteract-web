@@ -22,12 +22,28 @@ Promise<Metadata> {
 	const t = await getTranslations({ locale, namespace: "Metadata" });
 	const title = t("homeTitle");
 	const description = t("homeDescription");
-	const canonicalUrl = `${BASE_URL}/${locale}`;
+	// const canonicalUrl = `${BASE_URL}/${locale}`;
+
+	// Canonical URL should not include locale for default locale
+	const canonicalUrl =
+		locale === routing.defaultLocale
+			? `${BASE_URL}/`
+			: `${BASE_URL}/${locale}/`;
 
 	// Generate hreflang links
-	const languages: { [key: string]: string } = {};
+	/* 	const languages: { [key: string]: string } = {};
 	for (const loc of routing.locales) {
 		languages[loc] = `${BASE_URL}/${loc}`;
+	} */
+
+	// Generate hreflang links correctly
+	const languages: { [key: string]: string } = {};
+	for (const loc of routing.locales) {
+		if (loc === routing.defaultLocale) {
+			languages[loc] = `${BASE_URL}/`;
+		} else {
+			languages[loc] = `${BASE_URL}/${loc}/`;
+		}
 	}
 
 	return {
@@ -60,8 +76,10 @@ Promise<Metadata> {
 			images: ["/og-image.png"], // Must be an absolute URL or start with /
 			// creator: '@your_twitter_handle', // Optional: Add Twitter handle
 		},
-		// Add other metadata like robots if needed
-		// robots: { index: true, follow: true },
+		robots: {
+			index: true,
+			follow: true,
+		},
 	};
 }
 

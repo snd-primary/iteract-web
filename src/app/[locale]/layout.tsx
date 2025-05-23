@@ -12,6 +12,7 @@ import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/footer";
 import { PWALoader } from "@/components/pwa-loader";
+import { StructuredData } from "@/components/structured-data";
 
 const dotGothic16 = DotGothic16({
 	variable: "--font-dot-gothic-16",
@@ -101,6 +102,9 @@ export default async function RootLayout({
 			suppressHydrationWarning // Required when using next-themes
 			className={`${departureMono.variable} ${dotGothic16.variable} ${orbit.variable}`}
 		>
+			<head>
+				<StructuredData />
+			</head>
 			<body className={`${fontFamilyClass()} antialiased`}>
 				<ThemeProvider
 					attribute="class"
