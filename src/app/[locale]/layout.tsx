@@ -42,31 +42,92 @@ export const metadata: Metadata = {
 	metadataBase: new URL(BASE_URL),
 	title: {
 		default: "シンプルなポモドーロタイマー | Iteract（イテラクト）",
-		template: "%s | Iteract",
+		template: "%s | Iteract（イテラクト）",
 	},
 	description:
 		"Iteract（イテラクト）は、シンプルで使いやすいポモドーロタイマーアプリです。集中力を高め、生産性を向上させるためのツールとして最適です。",
-	colorScheme: "light dark", // lightとdarkの両方をサポートすることを示す
+
+	applicationName: "Iteract",
+
+	// 検索エンジンに推奨する挙動 (必須ではないが明示的に)
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			// GoogleBotに特化した設定
+			index: true,
+			follow: true,
+		},
+	},
+
+	colorScheme: "light dark",
 	viewport: "width=device-width, initial-scale=1",
+
 	alternates: {
-		canonical: "/",
+		canonical: "/ja",
 		languages: {
 			"en-US": "/en",
 			"ja-JP": "/ja",
 			"ko-KR": "/ko",
+			"x-default": "/en", // いずれの言語にも一致しない場合のデフォルトページ
 		},
 	},
+
 	themeColor: [
-		{ media: "(prefers-color-scheme: light)", color: "white" },
-		{ media: "(prefers-color-scheme: dark)", color: "black" },
+		{ media: "(prefers-color-scheme: light)", color: "#ffffff" },
+		{ media: "(prefers-color-scheme: dark)", color: "#000000" },
 	],
+
 	icons: {
 		icon: [
 			{ url: "/favicon.ico", type: "image/x-icon", sizes: "any" },
-			{ url: "/icon/icon.svg", type: "svg+xml" },
+			{ url: "/icon/icon.svg", type: "image/svg+xml" },
+			{ url: "/icon/icon-16x16.png", type: "image/png", sizes: "16x16" },
+			{ url: "/icon/icon-32x32.png", type: "image/png", sizes: "32x32" },
 		],
-		apple: [{ url: "/icon/apple-touch-icon.png", sizes: "152x152" }],
+		apple: [
+			// apple-touch-iconも良いです
+			{
+				url: "/icon/apple-touch-icon.png",
+				sizes: "180x180",
+				type: "image/png",
+			}, // 推奨サイズは180x180
+		],
 	},
+
+	// Open Graph (Facebook, LinkedInなどのSNS共有用)
+	openGraph: {
+		title: "シンプルなポモドーロタイマー | Iteract（イテラクト）",
+		description:
+			"Iteract（イテラクト）は、シンプルで使いやすいポモドーロタイマーアプリです。集中力を高め、生産性を向上させるためのツールとして最適です。",
+		url: `${BASE_URL}/ja`, // 共有される際の正規URL
+		siteName: "Iteract（イテラクト）",
+		images: [
+			{
+				url: `${BASE_URL}/og-image.png`, // 推奨サイズ: 1200x630px
+				width: 1200,
+				height: 630,
+				alt: "Iteract ポモドーロタイマーのイメージ",
+			},
+		],
+		locale: "ja_JP",
+		type: "website",
+	},
+
+	// Twitterカード (Twitter共有用)
+	twitter: {
+		card: "summary_large_image",
+		title: "シンプルなポモドーロタイマー | Iteract（イテラクト）",
+		description:
+			"Iteract（イテラクト）は、シンプルで使いやすいポモドーロタイマーアプリです。集中力を高め、生産性を向上させるためのツールとして最適です。",
+		// siteId: "@yourTwitterHandle",
+		creator: "@trhr_core",
+		images: [`${BASE_URL}/twitter-image.png`],
+	},
+
+	keywords:
+		"ポモドーロタイマー, 集中, 生産性, Iteract, イテラクト, webアプリ, 勉強タイマー",
+	authors: [{ name: "TRHR_CORE" }], // 作者情報
 };
 
 export default async function RootLayout({
